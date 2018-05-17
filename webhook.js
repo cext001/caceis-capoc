@@ -1,7 +1,11 @@
 var express = require('express'),
   app = express(),
   http = require('http'),
-  httpServer = http.Server(app);
+  httpServer = http.Server(app),
+  bodyParser = require('body-parser');
+
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json());
 
 const REST_PORT = process.env.PORT || 3000;
 
@@ -21,6 +25,7 @@ app.get('/chat', function (req, res) {
 });
 
 app.post('/api/webhook', function (req, res) {
+  console.log(req.body);
   console.log('Dialogflow Request body: ' + JSON.stringify(req.body));
   if (req.body.result) {
     console.log("Action: " + req.body.result.action + ", Intent: " + req.body.result.metadata.intentName);

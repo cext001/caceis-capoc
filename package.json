@@ -7,6 +7,7 @@
     "start": "node webhook.js"
   },
   "dependencies": {
+    "body-parser": "^1.18.3",
     "express": "^4.16.2",
     "nodemon": "^1.17.4"
   },
