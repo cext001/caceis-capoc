@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "main": "webhook.js",
   "scripts": {
-    "start": "nodemon webhook.js"
+    "start": "node webhook.js"
   },
   "dependencies": {
     "express": "^4.16.2",
