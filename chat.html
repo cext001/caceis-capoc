@@ -8,36 +8,25 @@
   <title>Caceis</title>
   <link rel="shortcut icon" href="./avatar/blank.ico" />
   <link rel="stylesheet" href="style/bootstrap.min.css">
-
   <!--Google Icon Font-->
-  <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
+  <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <!-- Propeller css -->
   <link href="style/propeller.min.css" rel="stylesheet">
   <link href="style/font-awesome.min.css" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="style/style.css">
-
   <!--Animate css -->
   <link rel="stylesheet" href="style/animate.min.css">
-
-
 </head>
 
-
 <body>
-
   <script data-main="js/require-setup" src="require.js"></script>
   <script>
-
     function bindJS() {
-
-
       $('.chat-body').css('height', (window.innerHeight - 140) + 'px')
       $('.main-container').css('opacity', '1');
 
       //hide emoji popover on outside click
       $(document).on('click', function (e) {
-
         $('[data-toggle="popover"]').each(function () {
 
           if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
@@ -45,12 +34,8 @@
             if ($("#" + $(this).attr("aria-describedby") + ":visible").length) {
               $(this).trigger('click')
             }
-
           }
-
-
         });
-
       });
 
       //triggered when modal is about to be shown
@@ -86,21 +71,7 @@
       <div class="pmd-card pmd-z-depth card-custom-view showheader" style="margin-bottom: 4px;">
         <div class="pmd-card-body" style="margin:0px;">
           <div class="table custom-size" style="margin:0px;">
-            <!-- <div class="media">
-              <div class="media-body">
-                <h1>RICOH</h1>
-              </div>
-              <div class="media-right media-middle">
-                <button id="btnMinimize" class="btn btn-sm pmd-btn-fab pmd-btn-flat pmd-ripple-effect btn-primary" type="button">
-                        <i class="material-icons pmd-sm">remove</i>
-                      </button>
-              </div>
-              <div class="media-right media-middle">
-                <button id="btnClose" class="btn btn-sm pmd-btn-fab pmd-btn-flat pmd-ripple-effect btn-primary" type="button">
-                        <i class="material-icons pmd-sm">close</i>
-                      </button>
-              </div>
-            </div> -->
+
           </div>
         </div>
       </div>
@@ -131,32 +102,12 @@
       </div>
     </div>
 
-    <!--<div class="row">
-      <div class="col-md-12">
-        <button style="margin-left: 0px; width: 26px; min-width: 10px" data-container="body" data-trigger="click" data-toggle="popover" data-placement="top" data-content="<h1 class='popup-msgbox' style='cursor:pointer;padding:0;margin:0'><span onclick='showmesgtext(this);return false;'  class='laughter' style='margin-right:3px;'>&#128516;</span><span  onclick='showmesgtext(this);return false;' class='winking'  style='margin-right:3px;'>&#128521;</span><span onclick='showmesgtext(this);return false;' class='delicious'  style='margin-right:3px;'>&#128523;</span><span onclick='showmesgtext(this);return false;' class='heart-shaped' style='margin-right:3px;' >&#128525;</span><span onclick='showmesgtext(this);return false;' style='margin-right:3px;' class='crying'>&#128546;</span><span onclick='showmesgtext(this);return false;' style='margin-right:3px;' class='angry'>&#128544;</span></h1>"
-          data-html="true" class="emoji-message btn btn-sm pmd-btn-fab pmd-btn-flat pmd-ripple-effect btn-primary" type="button" id="emojiPicker">
-                  <i class="material-icons pmd-sm">face</i>
-        </button>
-        <button onclick="$(this).parent().find('input[type=file]').click();" class="btn btn-sm pmd-btn-fab pmd-btn-flat pmd-ripple-effect btn-primary"
-          type="button">
-                  <i class="material-icons pmd-sm">attach_file</i>
-                </button>
-        <button class="btn btn-sm pmd-btn-fab pmd-btn-flat pmd-ripple-effect btn-primary" type="button">
-                  <i class="material-icons pmd-sm">mic</i>
-                </button>
-        <input onchange="alert('your webhook ajax here');" type="file" class="hidden" name="attachment" />
-      </div>
-    </div>-->
 
     <div class="row">
       <div class="col-xs-12" style="margin-top: 10px">
         <div class="form-group pmd-textfield pmd-textfield-floating-label">
           <div class="input-group">
             <div class="input-group-addon">
-              <!-- <button style="margin-left: 0px; width: 26px; min-width: 10px" data-container="body" data-trigger="click" data-toggle="popover" data-placement="top" data-content="<h1 class='popup-msgbox' style='cursor:pointer;padding:0;margin:0'><span onclick='showmesgtext(this);return false;'  class='laughter' style='margin-right:3px;'>&#128516;</span><span  onclick='showmesgtext(this);return false;' class='winking'  style='margin-right:3px;'>&#128521;</span><span onclick='showmesgtext(this);return false;' class='delicious'  style='margin-right:3px;'>&#128523;</span><span onclick='showmesgtext(this);return false;' class='heart-shaped' style='margin-right:3px;' >&#128525;</span><span onclick='showmesgtext(this);return false;' style='margin-right:3px;' class='crying'>&#128546;</span><span onclick='showmesgtext(this);return false;' style='margin-right:3px;' class='angry'>&#128544;</span></h1>"
-                  data-html="true" class="emoji-message btn btn-sm pmd-btn-fab pmd-btn-flat pmd-ripple-effect btn-primary" type="button" id="emojiPicker">
-                          <i class="material-icons pmd-sm" style="color:#CF142B">mood</i>
-                </button> -->
             </div>
             <label class="control-label">Write your message here...</label>
             <textarea style="height:auto;resize: none;" rows="1" id="btn-input" required class="form-control" maxlength="250"></textarea>
@@ -173,56 +124,19 @@
           </div>
         </div>
       </div>
-
-      <!--<div class="col-xs-2" style="right: 3%;">
-        <div class="menu" role="navigation">
-          <a id="btn-send-message" class="pmd-floating-action-btn btn btn-sm pmd-btn-fab pmd-btn-raised pmd-ripple-effect btn-primary"
-            href="javascript:void(0);">
-                    <span class="pmd-floating-hidden">Primary</span>
-                    <i class="material-icons pmd-sm">send</i>
-                  </a>
-        </div>
-      </div>-->
       <div class="row">
         <div class="col-xs-12" style="font-size: x-small;color: darkgray;">
-          <!-- <button data-target="#simple-dialog" data-toggle="modal" class="btn-link" type="button" style="color:#CF142B;padding-right: 0%;padding-left: 3%;">Ricoh Disclaimer</button><span>© Copyright Ricoh Global</span> -->
-          <!-- <button data-target="#simple-dialog" data-toggle="modal" class="btn-link" type="button" style="color:#CF142B;padding-right: 0%;padding-left: 3%;">Terms of Use</button> -->
-          <!-- <button type="button" class="btn-link" style="color:#CF142B;padding-right: 0%;padding-left: 3%;" onClick="window.open('https://www.ricoh-usa.com/en/about-us/terms-of-use?alnv=term','_blank'); ">Terms of Use and Conditions</button><span>© Copyright Hexaware Technologies</span> -->
           <span style="margin-left: 10px">Terms and Conditions © Copyright Hexaware Technologies</span>
         </div>
-
-        <!-- <div tabindex="-1" class="modal fade" id="simple-dialog" style="display: none;" aria-hidden="true">
-              <div class="modal-dialog center-modal-auto">
-                <div class="modal-content modal-box-custom">
-                  <div class="modal-body">
-                    <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
-                    <p></br><b>Disclaimer</b></br></br>Alerts inform the user about a situation or action that requires their confirmation or acknowledgement before proceeding.
-                    They differ slightly in appearance based upon the severity and impact of the message conveyed.</p>For further details,
-                      <button type="button" style="color:blue;padding-left: 0%" class="btn-link" onClick="window.open('https://www.ricoh-usa.com/en/about-us/terms-of-use?alnv=term','_blank'); ">Terms of Use</button>
-
-                  </div>
-                </div>
-            </div>
-        </div> -->
-
-
-
         <div tabindex="-1" class="modal fade" id="center-dialog" style="display: none;" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content" style="border-radius:10px">
               <div class="modal-header">
                 <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
-                <!-- <div class="media-left"> <a href="javascript:void(0);" class="avatar-list-img"> <img width="40" height="40" src="http://propeller.in/components/list/img/40x40.png"> </a>
-                  </div>
-                    <div class="media-body media-middle">
-                      <h3 class="pmd-card-title-text">Two-line item</h3>
-                        <span class="pmd-card-subtitle-text">Secondary text</span> </div>
-                    </div> -->
+
                 <div class="pmd-modal-media">
                   <img id="modal-img-holder" class="img-responsive btn-block" src="./images/profile-pic.png" />
                 </div>
-                <!-- <div class="modal-body"> Cards provide context and an entry point to more robust information and views. Don't overload cards with extraneous information or actions.
-                </div> -->
                 <div class="pmd-modal-action" style="position: relative;text-align: right;">
                   <a download="invoice_example.jpg"  target="_blank" class="btn btn-sm pmd-btn-fab pmd-btn-flat pmd-ripple-effect btn-primary"
                     id="modal-btndownload">
@@ -236,4 +150,5 @@
       </div>
     </div>
 </body>
+
 </html>
