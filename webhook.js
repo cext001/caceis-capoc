@@ -41,15 +41,16 @@ app.post('/api/webhook', function (req, res) {
             {
               platform: "facebook",
               title: "Please select",
+              subtitle: "",
               type: 1,
               buttons: [
                 {
-                  postback: "Yes Please",
-                  text: "yes"
+                  postback: "yes",
+                  text: "Yes Please"
                 },
                 {
-                  postback: "No I am Fine",
-                  text: "no"
+                  postback: "no",
+                  text: "No I am Fine"
                 }
               ]
             }

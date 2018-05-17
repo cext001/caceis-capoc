@@ -14,12 +14,13 @@ define(["utils", "settings"], function (utils, settings) {
     var methods = {};
     methods.bullets = (data) => {
         var bulletPoints = '';
-        if (data.indexOf('>') >= 0) {
+        /*if (data.indexOf('>') >= 0) {
             bulletPoints = data.split('>');
             return "<i class='material-icons' style='color: #28a745;font-weight: bold;clear:both;font-size:15px;float:left !important'>check</i>" + bulletPoints.join("<br><i class='material-icons' style='clear:both;color: #28a745;font-weight: bold;float:left !important;font-size:15px'>check</i>");
         } else {
             return data;
-        }
+        }*/
+        return data;
     }
     //User Plain Text
     methods.userplaintext = (data) => {
@@ -80,8 +81,8 @@ define(["utils", "settings"], function (utils, settings) {
             }
 
             cardBody += `<div class="pmd-card-title">
-                <h3 class="card-body"><p class="card-title">`+ methods.bullets(data.payload[i].title) + `</p>
-                <p class="card-subtitle">`+ methods.bullets(data.payload[i].subtitle) + `</p>
+                <h3 class="card-body"><p class="card-title">`+ data.payload[i].title + `</p>
+                <p class="card-subtitle">`+ data.payload[i].subtitle + `</p>
                 </div>`
 
             if (data.buttons && data.payload[i].type == 1) {

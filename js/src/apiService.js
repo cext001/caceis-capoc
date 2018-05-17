@@ -221,7 +221,9 @@ define(['jquery', 'settings', 'utils', 'messageTemplates', 'cards', 'uuid'],
                         //Carousel
                         if (isCardorCarousel) {
                             console.log(responsesSettings['isCardorCarousel']);
+                            
                             if (count == 1) {
+                               console.log("count", count);
                                 let cardHTML = cards({
                                     "payload": response.result.fulfillment.messages,
                                     "senderName": config.botTitle,
@@ -232,6 +234,7 @@ define(['jquery', 'settings', 'utils', 'messageTemplates', 'cards', 'uuid'],
                                     "buttons": hasbutton,
                                     "className": ''
                                 }, "card");
+                                console.log("cardHTML", cardHTML);
                                 callback(null, cardHTML);
                             }
                             else {
@@ -244,7 +247,6 @@ define(['jquery', 'settings', 'utils', 'messageTemplates', 'cards', 'uuid'],
                                     "bottomIcon": responsesSettings['isCardorCarousel'][1],
                                     "buttons": hasbutton,
                                     "className": ''
-
                                 }, "carousel");
                                 callback(null, carouselHTML);
                             }
@@ -383,8 +385,6 @@ define(['jquery', 'settings', 'utils', 'messageTemplates', 'cards', 'uuid'],
                             }, "login");
                             callback(null, cardHTML);
                         }
-
-
                     },
                     error: function () {
                         callback("Internal Server Error", null);
