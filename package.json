@@ -1,0 +1,24 @@
+{
+  "name": "corporateaction",
+  "productName": "Caseies Bot",
+  "version": "0.1.0",
+  "main": "webhook.js",
+  "scripts": {
+    "start": "nodemon webhook.js"
+  },
+  "dependencies": {
+    "express": "^4.16.2",
+    "nodemon": "^1.17.4"
+  },
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "Innovation team Hexaware Technologies",
+  "license": "ISC",
+  "bugs": {
+    "url": ""
+  },
+  "homepage": ""
+}
