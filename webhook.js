@@ -3,6 +3,8 @@ var express = require('express'),
   http = require('http'),
   httpServer = http.Server(app);
 
+const REST_PORT = process.env.PORT || 3000;
+
 app.use(express.static(__dirname));
 
 app.get('/', function (req, res) {
@@ -53,6 +55,6 @@ app.post('/api/webhook', function (req, res) {
   }
 });
 
-app.listen(3000, function () {
-  console.log("Starting widget on port 3000");
+app.listen(REST_PORT, function () {
+  console.log('Rest service ready on port ' + REST_PORT);
 });
