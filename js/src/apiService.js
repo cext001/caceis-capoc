@@ -32,7 +32,7 @@ define(['jquery', 'settings', 'utils', 'messageTemplates', 'cards', 'uuid'],
                 this.userSays(userInput, callback);
 
                 this.options.query = userInput;
-                console.log(userInput);
+                console.log('options',this.options);
                 $.ajax({
                     type: "POST",
                     url: config.chatServerURL + "query?v=20150910",

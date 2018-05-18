@@ -30,29 +30,148 @@ app.post('/api/webhook', function (req, res) {
   if (req.body.result) {
     console.log("Action: " + req.body.result.action + ", Intent: " + req.body.result.metadata.intentName);
     switch (req.body.result.action) {
-      case "caceis.raiseIssue":
+      case "input.welcome":
         res.json({
           messages: [
             {
-              platform: "facebook",
-              speech: "Can you tell me in a few words how I can help? Would you like me to query the data on your behalf ?",
-              type: 0
+              "type": 0,
+              "platform": "facebook",
+              "speech": "Hi , I'm Rosy , How can I help you today."
+            }
+          ]
+        }).end();
+        break;
+      case "caceis.nameIntent":
+        res.json({
+          messages: [
+            {
+              "type": 0,
+              "platform": "facebook",
+              "speech": "Can you tell me in a few words how I can help? Would you like me to query the data on your behalf ?"
             },
             {
-              platform: "facebook",
-              title: "Please select",
-              subtitle: "",
-              type: 1,
-              buttons: [
+              "type": 1,
+              "platform": "facebook",
+              "title": "Please select",
+              "subtitle": "",
+              "buttons": [
                 {
-                  postback: "yes",
-                  text: "Yes Please"
+                  "text": "Yes Please",
+                  "postback": "yes"
                 },
                 {
-                  postback: "no",
-                  text: "No I am Fine"
+                  "text": "No I am Fine",
+                  "postback": "no"
                 }
               ]
+            }
+          ]
+        }).end();
+        break;
+      case "caceisnameIntent.caceisnameIntent-yes":
+        res.json({
+          messages: [
+            {
+              "type": 0,
+              "platform": "facebook",
+              "speech": "Please can you tell me your account number with us"
+            }
+          ]
+        }).end();
+        break;
+      case "caceis.accountNumberIntent":
+        res.json({
+          messages: [
+            {
+              "type": 0,
+              "platform": "facebook",
+              "speech": "Thanks for sharing the information. Could you please share your query ?"
+            }
+          ]
+        }).end();
+        break;
+      case "caceis.raiseQuery":
+        res.json({
+          messages: [
+            {
+              "type": 0,
+              "platform": "facebook",
+              "speech": "You are talking about , ISIN number US0378831005 and  Stock name - Apple"
+            }
+          ]
+        }).end();
+        break;
+      case "caceisraiseQuery.caceisraiseQuery-custom":
+        res.json({
+          messages: [
+            {
+              "type": 0,
+              "platform": "facebook",
+              "speech": "You have 1500 quantiy of Apple shares as of now. Voluntary corporate action for rights issue is initiated by Apple."
+            },
+            {
+              "type": 0,
+              "platform": "facebook",
+              "speech": "Rights issue is offered at 2:1 @ Rs 25. Would you be interested to opt for rights issue ?"
+            },
+            {
+              "type": 1,
+              "platform": "facebook",
+              "title": "Please select",
+              "subtitle": "",
+              "buttons": [
+                {
+                  "text": "Yes",
+                  "postback": "yes"
+                },
+                {
+                  "text": "No",
+                  "postback": "no"
+                }
+              ]
+            }
+          ]
+        }).end();
+        break;
+      case "caceisraiseQuery.caceisraiseQuery-custom.caceisraiseQuery-custom-yes":
+        res.json({
+          messages: [
+            {
+              "type": 0,
+              "platform": "facebook",
+              "speech": "I take the response as \"Yes\" for corporate action for rights issue."
+            },
+            {
+              "type": 0,
+              "platform": "facebook",
+              "speech": "Thanks for sharing the information. Would you like to know the important dates for the rights issue."
+            }
+          ]
+        }).end();
+        break;
+      case "caceisraiseQuery.caceisraiseQuery-custom.caceisraiseQuery-custom-no":
+        res.json({
+          messages: [
+            {
+              "type": 0,
+              "platform": "facebook",
+              "speech": "I take the response as \"No\" for corporate action for rights issue."
+            },
+            {
+              "type": 0,
+              "platform": "facebook",
+              "speech": "Thanks for sharing the information. Would you like to know the important dates for the rights issue."
+            }
+          ]
+        }).end();
+        break;
+      case "caceisraiseQuery.caceisraiseQuery-custom.caceisraiseQuery-custom-no.caceisraiseQuery-custom-no-yes":
+        res.json({
+          messages: [
+            {
+              "type": 0,
+              "platform": "facebook",
+              "speech": "Last date for response - 21-05-2018\nPayment date - 25-05-2018\nSettlement date - 28-05-2018"
             }
           ]
         }).end();
