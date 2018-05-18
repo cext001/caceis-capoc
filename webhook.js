@@ -3,7 +3,7 @@ var express = require('express'),
   http = require('http'),
   httpServer = http.Server(app),
   bodyParser = require('body-parser')
-  botconversation = {};
+botconversation = { "sessionId": "" };
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
@@ -25,13 +25,15 @@ app.get('/chat', function (req, res) {
 });
 
 app.post('/api/webhook', function (req, res) {
-  botconversation.sessionId = req.body.sessionId;
   console.log('Dialogflow Request body: ' + JSON.stringify(req.body));
   console.log("botconversation", botconversation);
   if (req.body.result) {
     console.log("Action: " + req.body.result.action + ", Intent: " + req.body.result.metadata.intentName);
     switch (req.body.result.action) {
       case "input.welcome":
+        if (!botconversation.sessionId) {
+          botconversation.sessionId = req.body.sessionId;
+        }
         res.json({
           messages: [
             {
@@ -189,6 +191,7 @@ app.post('/api/webhook', function (req, res) {
         }).end();
         break;
       case "caies.thankIntent":
+        botconversation.sessionId = "";
         res.json({
           messages: [
             {
