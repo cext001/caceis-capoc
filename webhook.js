@@ -3,7 +3,7 @@ var express = require('express'),
   http = require('http'),
   httpServer = http.Server(app),
   bodyParser = require('body-parser')
-botconversation = { "sessionId": "" };
+botconversation = { "sessionId": "", "conversation": [] };
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
@@ -26,14 +26,16 @@ app.get('/chat', function (req, res) {
 
 app.post('/api/webhook', function (req, res) {
   console.log('Dialogflow Request body: ' + JSON.stringify(req.body));
+  if (!botconversation.sessionId) {
+    botconversation.sessionId = req.body.sessionId;
+    botconversation.conversation = [];
+  }
   console.log("botconversation", botconversation);
   if (req.body.result) {
     console.log("Action: " + req.body.result.action + ", Intent: " + req.body.result.metadata.intentName);
     switch (req.body.result.action) {
       case "input.welcome":
-        if (!botconversation.sessionId) {
-          botconversation.sessionId = req.body.sessionId;
-        }
+
         res.json({
           messages: [
             {
@@ -110,12 +112,7 @@ app.post('/api/webhook', function (req, res) {
             {
               "type": 0,
               "platform": "facebook",
-              "speech": "You have 1500 quantiy of Apple shares as of now. Voluntary corporate action for rights issue is initiated by Apple."
-            },
-            {
-              "type": 0,
-              "platform": "facebook",
-              "speech": "Rights issue is offered at 2:1 @ Rs 25. Would you be interested to opt for rights issue ?"
+              "speech": "You have 1500 quantiy of Apple shares as of now. Voluntary corporate action for rights issue is initiated by Apple.\nRights issue is offered at 2:1 @ Rs 25. Would you be interested to opt for rights issue?."
             },
             {
               "type": 1,
@@ -142,12 +139,7 @@ app.post('/api/webhook', function (req, res) {
             {
               "type": 0,
               "platform": "facebook",
-              "speech": "I take the response as \"Yes\" for corporate action for rights issue."
-            },
-            {
-              "type": 0,
-              "platform": "facebook",
-              "speech": "Thanks for sharing the information. Would you like to know the important dates for the rights issue."
+              "speech": "I take the response as \"Yes\" for corporate action for rights issue.\nThanks for sharing the information. Would you like to know the important dates for the rights issue."
             }
           ]
         }).end();
@@ -158,12 +150,7 @@ app.post('/api/webhook', function (req, res) {
             {
               "type": 0,
               "platform": "facebook",
-              "speech": "I take the response as \"No\" for corporate action for rights issue."
-            },
-            {
-              "type": 0,
-              "platform": "facebook",
-              "speech": "Thanks for sharing the information. Would you like to know the important dates for the rights issue."
+              "speech": "I take the response as \"No\" for corporate action for rights issue.\nThanks for sharing the information. Would you like to know the important dates for the rights issue."
             }
           ]
         }).end();
