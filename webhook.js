@@ -2,7 +2,8 @@ var express = require('express'),
   app = express(),
   http = require('http'),
   httpServer = http.Server(app),
-  bodyParser = require('body-parser');
+  bodyParser = require('body-parser')
+  botconversation = {};
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
@@ -15,7 +16,6 @@ app.get('/', function (req, res) {
   res.redirect("/caceiswebsite");
 });
 
-
 app.get('/caceiswebsite', function (req, res) {
   res.sendFile(__dirname + '/home.html');
 });
@@ -25,8 +25,9 @@ app.get('/chat', function (req, res) {
 });
 
 app.post('/api/webhook', function (req, res) {
-  console.log(req.body);
+  botconversation.sessionId = req.sessionId;
   console.log('Dialogflow Request body: ' + JSON.stringify(req.body));
+  console.log("botconversation", botconversation);
   if (req.body.result) {
     console.log("Action: " + req.body.result.action + ", Intent: " + req.body.result.metadata.intentName);
     switch (req.body.result.action) {
@@ -166,6 +167,17 @@ app.post('/api/webhook', function (req, res) {
         }).end();
         break;
       case "caceisraiseQuery.caceisraiseQuery-custom.caceisraiseQuery-custom-no.caceisraiseQuery-custom-no-yes":
+        res.json({
+          messages: [
+            {
+              "type": 0,
+              "platform": "facebook",
+              "speech": "Last date for response - 21-05-2018\nPayment date - 25-05-2018\nSettlement date - 28-05-2018"
+            }
+          ]
+        }).end();
+        break;
+      case "caceisraiseQuery.caceisraiseQuery-custom.caceisraiseQuery-custom-yes.caceisraiseQuery-custom-yes-yes":
         res.json({
           messages: [
             {
