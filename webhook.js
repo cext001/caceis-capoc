@@ -25,7 +25,7 @@ app.get('/chat', function (req, res) {
 });
 
 app.post('/api/webhook', function (req, res) {
-  botconversation.sessionId = req.sessionId;
+  botconversation.sessionId = req.body.sessionId;
   console.log('Dialogflow Request body: ' + JSON.stringify(req.body));
   console.log("botconversation", botconversation);
   if (req.body.result) {
