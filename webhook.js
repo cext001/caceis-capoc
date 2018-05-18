@@ -176,6 +176,16 @@ app.post('/api/webhook', function (req, res) {
           ]
         }).end();
         break;
+      case "caies.thankIntent":
+        res.json({
+          messages: [
+            {
+              "type": 0,
+              "speech": "Happy to help you. Have a nice day."
+            }
+          ]
+        }).end();
+        break;
     }
   }
 });
