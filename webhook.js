@@ -2,9 +2,8 @@ var express = require('express'),
   app = express(),
   http = require('http'),
   httpServer = http.Server(app),
-  bodyParser = require('body-parser')
-_ = require('lodash')
-botconversation = { "sessionId": "", "conversation": [] };
+  bodyParser = require('body-parser');
+
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
@@ -27,19 +26,7 @@ app.get('/chat', function (req, res) {
 
 app.post('/api/webhook', function (req, res) {
   console.log('Dialogflow Request body: ' + JSON.stringify(req.body));
-  if (!botconversation.sessionId) {
-    botconversation.sessionId = req.body.sessionId;
-    botconversation.conversation = [];
-  } else {
-    var agentSpeech;
-    if (botconversation.sessionId != req.body.sessionId && !req.body.result.metadata.endConversation) {
-      botconversation.sessionId = req.body.sessionId;
-      botconversation.conversation = [];
-    } else {
-      agentSpeech = getAgentResponse(req.body.result.fulfillment.messages);
-      botconversation.conversation.push({ "user": req.body.result.resolvedQuery, "agent": agentSpeech });
-    }
-  }
+  
   console.log("botconversation", botconversation);
   if (req.body.result) {
     console.log("Action: " + req.body.result.action + ", Intent: " + req.body.result.metadata.intentName);
@@ -121,7 +108,7 @@ app.post('/api/webhook', function (req, res) {
             {
               "type": 0,
               "platform": "facebook",
-              "speech": "You have 1500 quantiy of Apple shares as of now. Voluntary corporate action for rights issue is initiated by Apple.\nRights issue is offered at 2:1 @ Rs 25. Would you be interested to opt for rights issue?."
+              "speech": "You have 1500 quantiy of Apple shares as of now. Voluntary corporate action for rights issue is initiated by Apple.\n\nRights issue is offered at 2:1 @ Rs 25. Would you be interested to opt for rights issue?."
             },
             {
               "type": 1,
@@ -187,8 +174,6 @@ app.post('/api/webhook', function (req, res) {
         }).end();
         break;
       case "caies.thankIntent":
-        botconversation.sessionId = "";
-        botconversation.conversation = [];
         res.json({
           messages: [
             {
@@ -205,13 +190,3 @@ app.post('/api/webhook', function (req, res) {
 app.listen(REST_PORT, function () {
   console.log('Rest service ready on port ' + REST_PORT);
 });
-
-function getAgentResponse(messages) {
-  var agentSpeech;
-  _.forEach(messages, function (value, key) {
-    if (value.type == 0) {
-      agentSpeech = value.speech;
-    }
-  });
-  return agentSpeech;
-}

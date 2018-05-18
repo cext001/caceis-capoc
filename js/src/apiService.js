@@ -8,7 +8,7 @@ This file is part of the Innovation LAB - Offline Bot.
 
 define(['jquery', 'settings', 'utils', 'messageTemplates', 'cards', 'uuid'],
     function ($, config, utils, messageTpl, cards, uuidv1) {
-
+        var botconversation = { "sessionId": "", "conversation": [] };
         class ApiHandler {
 
             constructor() {
@@ -16,6 +16,7 @@ define(['jquery', 'settings', 'utils', 'messageTemplates', 'cards', 'uuid'],
                     sessionId: uuidv1(),
                     lang: "en"
                 };
+                
             }
 
             userSays(userInput, callback) {
@@ -32,7 +33,7 @@ define(['jquery', 'settings', 'utils', 'messageTemplates', 'cards', 'uuid'],
                 this.userSays(userInput, callback);
 
                 this.options.query = userInput;
-                console.log('options',this.options);
+                console.log('options', this.options);
                 $.ajax({
                     type: "POST",
                     url: config.chatServerURL + "query?v=20150910",
@@ -43,6 +44,28 @@ define(['jquery', 'settings', 'utils', 'messageTemplates', 'cards', 'uuid'],
                     },
                     data: JSON.stringify(this.options),
                     success: function (response) {
+
+                        if (!botconversation.sessionId) {
+                            botconversation.sessionId = response.sessionId;
+                            botconversation.conversation = [];
+                        } else {
+                            var agentSpeech;
+                            if (botconversation.sessionId != response.sessionId && !response.result.metadata.endConversation) {
+                                botconversation.sessionId = response.sessionId;
+                                botconversation.conversation = [];
+                            } else {
+                                var agentSpeech;
+                                $.each(response.result.fulfillment.messages, function (key, value) {
+                                    if (value.type == 0) {
+                                        agentSpeech = value.speech;
+                                    }
+                                });
+                                botconversation.conversation.push({ "user": response.result.resolvedQuery, "agent": agentSpeech });
+                            }
+                        }
+
+                        console.log("botconversation", botconversation);
+
                         let isCardorCarousel = false;
                         let isImage = false;
                         let isQuickReply = false;
@@ -221,9 +244,9 @@ define(['jquery', 'settings', 'utils', 'messageTemplates', 'cards', 'uuid'],
                         //Carousel
                         if (isCardorCarousel) {
                             console.log(responsesSettings['isCardorCarousel']);
-                            
+
                             if (count == 1) {
-                               console.log("count", count);
+                                console.log("count", count);
                                 let cardHTML = cards({
                                     "payload": response.result.fulfillment.messages,
                                     "senderName": config.botTitle,
