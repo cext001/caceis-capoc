@@ -3,6 +3,7 @@ var express = require('express'),
   http = require('http'),
   httpServer = http.Server(app),
   bodyParser = require('body-parser')
+_ = require('lodash')
 botconversation = { "sessionId": "", "conversation": [] };
 
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -29,13 +30,21 @@ app.post('/api/webhook', function (req, res) {
   if (!botconversation.sessionId) {
     botconversation.sessionId = req.body.sessionId;
     botconversation.conversation = [];
+  } else {
+    var agentSpeech;
+    if (botconversation.sessionId != req.body.sessionId && !req.body.result.metadata.endConversation) {
+      botconversation.sessionId = req.body.sessionId;
+      botconversation.conversation = [];
+    } else {
+      agentSpeech = getAgentResponse(req.body.result.fulfillment.messages);
+      botconversation.conversation.push({ "user": req.body.result.resolvedQuery, "agent": agentSpeech });
+    }
   }
   console.log("botconversation", botconversation);
   if (req.body.result) {
     console.log("Action: " + req.body.result.action + ", Intent: " + req.body.result.metadata.intentName);
     switch (req.body.result.action) {
       case "input.welcome":
-
         res.json({
           messages: [
             {
@@ -179,6 +188,7 @@ app.post('/api/webhook', function (req, res) {
         break;
       case "caies.thankIntent":
         botconversation.sessionId = "";
+        botconversation.conversation = [];
         res.json({
           messages: [
             {
@@ -195,3 +205,13 @@ app.post('/api/webhook', function (req, res) {
 app.listen(REST_PORT, function () {
   console.log('Rest service ready on port ' + REST_PORT);
 });
+
+function getAgentResponse(messages) {
+  var agentSpeech;
+  _.forEach(messages, function (value, key) {
+    if (value.type == 0) {
+      agentSpeech = value.speech;
+    }
+  });
+  return agentSpeech;
+}
