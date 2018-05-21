@@ -64,7 +64,7 @@ define(['jquery', 'settings', 'utils', 'messageTemplates', 'cards', 'uuid'],
                             }
                         }
 
-                        console.log("botconversation", botconversation);
+                        console.log("botconversation", JSON.stringify(botconversation));
 
                         let isCardorCarousel = false;
                         let isImage = false;

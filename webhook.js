@@ -13,19 +13,11 @@ const REST_PORT = process.env.PORT || 3000;
 app.use(express.static(__dirname));
 
 app.get('/', function (req, res) {
-  res.redirect("/caceiswebsite");
-});
-
-app.get('/caceiswebsite', function (req, res) {
   res.sendFile(__dirname + '/home.html');
 });
 
 app.get('/chat', function (req, res) {
   res.sendFile(__dirname + '/chat.html');
-});
-
-app.get('/chat1', function (req, res) {
-  res.sendFile(__dirname + '/home1.html');
 });
 
 app.post('/api/webhook', function (req, res) {
