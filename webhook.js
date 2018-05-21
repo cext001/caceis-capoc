@@ -24,10 +24,12 @@ app.get('/chat', function (req, res) {
   res.sendFile(__dirname + '/chat.html');
 });
 
+app.get('/chat1', function (req, res) {
+  res.sendFile(__dirname + '/home1.html');
+});
+
 app.post('/api/webhook', function (req, res) {
   console.log('Dialogflow Request body: ' + JSON.stringify(req.body));
-  
-  console.log("botconversation", botconversation);
   if (req.body.result) {
     console.log("Action: " + req.body.result.action + ", Intent: " + req.body.result.metadata.intentName);
     switch (req.body.result.action) {
