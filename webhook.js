@@ -196,6 +196,38 @@ app.post('/api/webhook', function (req, res) {
   }
 });
 
+app.get('/mssql', function (req, res) {
+
+  var sql = require("mssql");
+
+  // config for your database
+  var config = {
+    server: '52.71.120.86',
+    database: 'Caceis',
+    user: 'Administrator',
+    password: 'rzb&NXvsbOqJkLLweiX2Ztzln-%7a*N@',
+    port: 1433
+  };
+  // connect to your database
+  sql.connect(config, function (err) {
+
+    if (err) console.log(err + "Sssssss");
+
+    // create Request object
+    var request = new sql.Request();
+
+    // query to the database and get the records
+    request.query('select * from Messagecentre', function (err, recordset) {
+
+      if (err) console.log(err)
+
+      // send records as a response
+      res.send(recordset);
+
+    });
+  });
+});
+
 app.listen(REST_PORT, function () {
   console.log('Rest service ready on port ' + REST_PORT);
 });
