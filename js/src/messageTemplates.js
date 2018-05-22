@@ -47,7 +47,7 @@ define(["utils", "settings"], function (utils, settings) {
         if (data.responseIndex) {
             html += `<img style="border-radius:50%;border:2px solid white;float: left;margin-right: 10px;" width="40" height="40" src='${settings.botAvatar}'/><p class="list-group-item-text-bot beforeAfter">${data.payload}</p>`;
         } else {
-            html += `<img style="border-radius:50%;float: left;margin-right: 10px;" width="40" height="40" src='avatar/blank.ico'/><p class="list-group-item-text-bot">` + methods.bullets(data.payload) + `</p>`;
+            html += `<img style="border-radius:50%;float: left;margin-right: 10px;" width="40" height="40" src='${settings.botAvatar}'/><p class="list-group-item-text-bot">` + methods.bullets(data.payload) + `</p>`;
         }
 
         if (data.bottomIcon) {
@@ -170,7 +170,7 @@ define(["utils", "settings"], function (utils, settings) {
                 } else {
                     //apiquickRepliesHtml+=	`<img style="border-radius:50%;float: left;margin-right: 10px;" width="40" height="40" src='avatar/blank.ico'/>`
                     if (qReply[i].title.trim().length) {
-                        apiquickRepliesHtml += `<img style="border-radius:50%;float: left;margin-right: 10px;" width="40" height="40" src='avatar/blank.ico'/><p class="list-group-item-quick-reply-space">${qReply[i].title}</p>`
+                        apiquickRepliesHtml += `<img style="border-radius:50%;float: left;margin-right: 10px;" width="40" height="40" src='${settings.botAvatar}'/><p class="list-group-item-quick-reply-space">${qReply[i].title}</p>`
                     }
 
                 }
@@ -192,7 +192,7 @@ define(["utils", "settings"], function (utils, settings) {
         if (data.responseIndex) {
             carousel += `<img style="border-radius:50%;border:2px solid white;float: left;margin-right: 10px;" width="40" height="40" src='${settings.botAvatar}'/><div id="${uniqueId}" class="beforeAfter carousel slide pmd-card pmd-card-default pmd-z-depth carousel-custom" data-ride="false">`
         } else {
-            carousel += `<img style="border-radius:50%;float: left;margin-right: 10px;" width="40" height="40" src='avatar/blank.ico'/><div id="${uniqueId}" class="carousel slide pmd-card pmd-card-default pmd-z-depth carousel-custom" data-ride="false">`
+            carousel += `<img style="border-radius:50%;float: left;margin-right: 10px;" width="40" height="40" src='${settings.botAvatar}'/><div id="${uniqueId}" class="carousel slide pmd-card pmd-card-default pmd-z-depth carousel-custom" data-ride="false">`
         }
 
         carousel += `<!-- Carousel items -->
