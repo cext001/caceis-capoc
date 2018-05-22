@@ -600,6 +600,7 @@ ul.menu li a .menu-ico i::before{margin:0}
 #ancre ul li{list-style:none;color:#D90513;margin:0;padding:0;float:right;clear:both;position:relative}
 #ancre ul li a,#ancre ul li em{display:inline-block;width:40px;border-top:2px solid #D90513;padding:5px 0;height:40px;background:#fff}
 #ancre ul li .ico{font-size:1.2em}
+
 #ancre ul li em{border-bottom:2px solid #D90513}
 #ancre ul li span.title{margin:0;text-transform:uppercase;background:#D90513;color:#fff;padding:7px 10px;height:42px;border-top:2px solid #D90513;border-bottom:2px solid #D90513;position:absolute;top:0;right:40px;width:210px}
 #ancre ul li:last-child span.title{height:40px}
