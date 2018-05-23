@@ -74,7 +74,7 @@ app.post('/api/webhook', function(req, res) {
                 }).end();
                 break;
             case "caceis.accountNumberIntent":
-                var accountNumber = result.parameters.number;
+                var accountNumber = req.body.result.parameters.number;
                 return helper.getCustomerDetails(accountNumber).then((result) => {
                     console.log('result count', result[0].count);
                     if(result[0].count > 0) {
