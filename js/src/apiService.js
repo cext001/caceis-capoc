@@ -93,7 +93,6 @@ define(['jquery', 'settings', 'utils', 'messageTemplates', 'cards', 'uuid'],
                                 }
                             });
                             botconversation = { "sessionId": "", "conversation": [] };
-                            this.options.sessionId = uuidv1();
                         }
 
                         let isCardorCarousel = false;
