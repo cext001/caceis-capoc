@@ -22,12 +22,14 @@ module.exports = {
         });
     },
     "saveChatHistory": function (record) {
-        con.query("INSERT INTO messagecentre(Message_ID,Mode,Customer_ID,Name,Date,Subject,Status,Assigned,Chat_History) VALUES (?,?, ?,?,?,?,?,?,?)", record, function (err, result) {
-            if (err) {
-                reject(err)
-            };
-            console.log("Number of records inserted: " + result.affectedRows);
-            resolve(result);            
+        return new Promise(function (resolve, reject) {
+            con.query("INSERT INTO messagecentre(Message_ID,Mode,Customer_ID,Name,Date,Subject,Status,Assigned,Chat_History) VALUES (?,?, ?,?,?,?,?,?,?)", record, function (err, result) {
+                if (err) {
+                    reject(err)
+                };
+                console.log("Number of records inserted: " + result.affectedRows);
+                resolve(result);
+            });
         });
     }
 };
