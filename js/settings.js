@@ -16,5 +16,6 @@ define({
     userAvatar: "avatar/user.png",
     attachmentUploadURL: "",
     platform: "facebook",
-    showHeader: true
+    showHeader: true,
+    baseurl:"https://caceis-capoc.herokuapp.com/",
 });

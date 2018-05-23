@@ -16,7 +16,6 @@ define(['jquery', 'settings', 'utils', 'messageTemplates', 'cards', 'uuid'],
                     sessionId: uuidv1(),
                     lang: "en"
                 };
-                
             }
 
             userSays(userInput, callback) {
@@ -64,7 +63,38 @@ define(['jquery', 'settings', 'utils', 'messageTemplates', 'cards', 'uuid'],
                             }
                         }
 
-                        console.log("botconversation", JSON.stringify(botconversation));
+                        if (response.result.metadata.endConversation) {
+                            var customerId;
+                            var customerName;
+                            var contexts = response.result.contexts;
+
+                            console.log("conversation ended");
+                            console.log("contexts", contexts);
+                            console.log("botconversation", botconversation);
+
+                            $.each(contexts, function (key, value) {
+                                if (value.name == "account-info") {
+                                    customerId = value.parameters.number;
+                                }
+                                if (value.name == "customer-name") {
+                                    customerName = value.parameters.firstName;
+                                }
+                            });
+
+                            $.ajax({
+                                type: 'POST',
+                                url: config.baseurl + 'chatbot/savehistory',
+                                dataType: "json",
+                                data: {
+                                    "customerId": customerId, "customerName": customerName, "botconversation": JSON.stringify(botconversation)
+                                },
+                                success: function (response) {
+                                    console.log("history saved!!!")
+                                }
+                            });
+                            botconversation = { "sessionId": "", "conversation": [] };
+                            this.options.sessionId = uuidv1();
+                        }
 
                         let isCardorCarousel = false;
                         let isImage = false;

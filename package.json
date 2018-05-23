@@ -10,7 +10,7 @@
     "body-parser": "^1.18.3",
     "express": "^4.16.3",
     "lodash": "^4.17.10",
-    "mssql": "^4.1.0",
+    "mysql": "^2.15.0",
     "nodemon": "^1.17.4"
   },
   "description": "",

@@ -2,7 +2,9 @@ var express = require('express'),
   app = express(),
   http = require('http'),
   httpServer = http.Server(app),
-  bodyParser = require('body-parser');
+  bodyParser = require('body-parser')
+mysql = require('mysql')
+_ = require('lodash');
 
 
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -196,34 +198,31 @@ app.post('/api/webhook', function (req, res) {
   }
 });
 
-app.get('/mssql', function (req, res) {
+app.post('/chatbot/savehistory', function (req, res) {
+  var botconversation = JSON.parse(req.body.botconversation);
+  
+  var contexts = req.body.contexts;
+  var sessionId = botconversation.sessionId;
 
-  var sql = require("mssql");
+  botconversation = JSON.stringify(botconversation);
+  var record = [sessionId, "Chat", req.body.customerId, req.body.customerName, "2017-09-15", "Dividend Payout", "", "", botconversation];
+  console.log("record", record);
 
-  // config for your database
-  var config = {
-    server: '52.71.120.86',
-    database: 'Caceis',
-    user: 'Administrator',
-    password: 'rzb&NXvsbOqJkLLweiX2Ztzln-%7a*N@',
-    port: 1433
-  };
-  // connect to your database
-  sql.connect(config, function (err) {
+  var con = mysql.createConnection({
+    host: "52.71.120.86",
+    user: "root",
+    password: "root",
+    database: "caceis"
+  });
 
-    if (err) console.log(err + "Sssssss");
-
-    // create Request object
-    var request = new sql.Request();
-
-    // query to the database and get the records
-    request.query('select * from Messagecentre', function (err, recordset) {
-
-      if (err) console.log(err)
-
-      // send records as a response
-      res.send(recordset);
-
+  con.connect(function (err) {
+    if (err) {
+      console.log(err);
+    }
+    con.query("INSERT INTO messagecentre(Message_ID,Mode,Customer_ID,Name,Date,Subject,Status,Assigned,Chat_History) VALUES (?,?, ?,?,?,?,?,?,?)", record, function (err, result) {
+      if (err) throw err;
+      console.log("Number of records inserted: " + result.affectedRows);
+      res.send("saved history");
     });
   });
 });
