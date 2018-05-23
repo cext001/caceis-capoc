@@ -17,5 +17,6 @@ define({
     attachmentUploadURL: "",
     platform: "facebook",
     showHeader: true,
+    /*baseurl:"http://localhost:3000/",*/
     baseurl:"https://caceis-capoc.herokuapp.com/",
 });
