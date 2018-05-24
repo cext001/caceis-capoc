@@ -195,7 +195,15 @@ app.post('/api/webhook', function(req, res) {
                 }).end();
                 break;
             case "caceis.nameCompanyIntent":
-
+            res.json({
+                messages: [
+                    {
+                        "type": 0,
+                        "platform": "facebook",
+                        "speech": "Can you tell me in a few words how I can help you ?."
+                    }
+                ]
+            }).end();
                 break;
         }
     }
