@@ -260,9 +260,10 @@ app.post('/api/webhook', function(req, res) {
                         ],
                         contextOut: [
                             {
-                                name: "isin-info",
+                                name: "security-info",
                                 parameters: {
-                                    securityIsin: result[0].ISIN
+                                    securityISIN: result[0].ISIN,
+                                    securityName:result[0].Security_Name
                                 },
                                 lifespan: 5
                             }
