@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html style="height: 100%;">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-scope">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href="https://fonts.googleapis.com/css?family=Abel" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="public/css/login.css" />
+    <link rel="stylesheet" type="text/css" href="public/css/jquery-ui.css" />
+    <link rel="stylesheet" type="text/css" href="public/css/bootstrap.css" />
+    <link rel="shortcut icon" href="./avatar/blank.ico" />
+    <link rel="stylesheet" href="style/bootstrap.min.css">
+    <!--Google Icon Font-->
+    <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Propeller css -->
+    <link href="style/propeller.min.css" rel="stylesheet">
+    <link href="style/font-awesome.min.css" rel="stylesheet">
+    <!--<link rel="stylesheet" type="text/css" href="style/style.css">-->
+    <style id="topFrame">
+        body {
+            display: none !important;
+        }
+
+        .btn.pmd-btn-fab {
+            padding: 0!important;
+            border-radius: 50%!important;
+        }
+    </style>
+
+    <script type="text/javascript" src="public/js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="public/js/bootstrap.js"></script>
+    <script type="text/javascript" src="public/js/jquery-ui-1.12.1.js"></script>
+    <script type="text/javascript" src="public/js/popup.js"></script>
+    <script type="text/javascript" src="public/js/login.js"></script>
+    <!--<script type="text/javascript" src="public/js/jquery-migrate-3.0.0.js"></script>-->
+
+    <title>Corporate Action Communication Center</title>
+    <!--Animate css -->
+    <link rel="stylesheet" href="style/animate.min.css">
+    <style>
+        div.popover-content {
+            padding: 3px 5px !important;
+        }
+    </style>
+</head>
+
+
+<body style="background:url('public/img/fond_connexion.jpg')">
+
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/"><img width="150" class="img-responsive" src="public/img/logo.png"></a>
+            </div>
+            <h5 class="heading-h5"><b>CACC</b> | Corporate Action Communication Center</h5>
+            <div class="pull-right language-top">
+                <form id="formLang" name="formLang" action="formLang">
+                    <select name="langCombo" tabindex="50" id="langCombo" onchange="changeLangue(formLang.langCombo.options[selectedIndex].value);">
+    <option value="fr">Français</option>
+    <option value="en" selected="selected">English</option>
+    <option value="de">Deutsch</option>
+    <option value="es">Español</option>
+    <option value="nl">Nederlandse</option>
+    <option value="pt">Português</option>
+    <option value="it">Italiano</option>
+    <option value="br">Brasileiro</option>
+
+
+</select>
+                </form>
+
+            </div>
+    </nav>
+
+    <div class="container">
+
+
+        <div class="colcenter">
+
+
+            <div class="box">
+                <!-- contenu de la page -->
+
+
+
+
+
+                <form id="login_noIdentifier_input" name="noIdentifierForm" onsubmit="return true;" action="/actionnaire/auth/login.noIdentifier.input.action"
+                    method="post">
+                </form>
+
+
+
+
+
+
+                <div class="identificationbox">
+                    <div class="messageTitle">
+                        <strong>Log in to your personal access</strong>
+                    </div>
+                    <div class="messageTexte">
+
+                        <form id="idenForm" name="idenForm" onsubmit="return true;" action="/actionnaire/auth/loginHome.execute.action" method="post">
+                            <table style="margin: auto;">
+                                <tr>
+                                    <td align="right">Login &nbsp;</td>
+                                    <td align="left"><input type="text" autocomplete="off" name="login" size="25" maxlength="12" value=""
+                                            tabindex="1" id="login" />&nbsp;<a class="help" href="#" onclick="showHelpLogin()"></a></td>
+
+                                </tr>
+                                <tr>
+                                    <td colspan="2" align="center" style="padding-top: 10px;"><input type="button" class="bouton" tabindex="3" value="Lost login" onclick="document.noIdentifierForm.submit();"
+                                        /> <input type="submit" class="bouton" value="Validate" tabindex="4" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" align="center"></td>
+                                </tr>
+                            </table>
+                        </form>
+
+
+
+
+                    </div>
+                </div>
+
+                <div> <a href="#" target="_blank"> <img class="img-responsive" style="padding:20px 0px 35px 0px" alt="" src="public/img/encart-accueil.jpg"> </a>                    </div>
+
+
+
+
+            </div>
+        </div>
+        <div class="colright">
+            <div class="colrightimg"></div>
+        </div>
+    </div>
+    <a style="margin-bottom:15px;margin-right:10px;position:fixed;bottom: 0px;right: 7px;z-index:1000;background-color:#c20a37;"
+        class="btn pmd-btn-fab  pull-right pmd-btn-raised pmd-ripple-effect  btn-primary" id="webChat" data-trigger="click" data-toggle="popover"
+        data-placement="top" data-content="<iframe  src='https://caceis-capoc.herokuapp.com/chat.html?popup=1' height='510' width='250' style='border:none'></iframe>"
+        data-html="true" href="javascript:void(0);">
+            <span class="pmd-floating-hidden">Primary</span>
+            <i id="webChatPrimaryIcon" class="material-icons md-light pmd-sm">chat</i>
+            <i id="webChatCloseIcon" class="material-icons md-light pmd-sm" style="display: none">close</i>
+          </a>
+    <div class="footer">
+
+        <div>
+            <div class="footerleft">
+                <a href="/actionnaire/auth/mentionsLegales.action" target="_blank">Legal statement</a>
+            </div>
+            <span class="footertext">
+		 
+	</span>
+            <div class="footerright">
+                <a href="/actionnaire/auth/politiqueSecurite.action" target="_blank">Site Security</a>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        if (self === top) {
+            var topFrame = document.getElementById("topFrame");
+            topFrame.parentNode.removeChild(topFrame);
+        } else {
+            top.location = self.location;
+        }
+    </script>
+    <script type="text/javascript">
+        function showHelpLogin() {
+            showHelpPopup('/actionnaire/auth/helpLogin.action');
+        }
+        function showHelpPassTemp() {
+            showHelpPopup('/actionnaire/auth/helpPassTemp.action');
+        }
+        function showHelpRefClient() {
+            showHelpPopup('/actionnaire/auth/helpRefClient.action');
+        }
+        function removeParam(key, sourceURL) {
+            var rtn = sourceURL.split("?")[0],
+                param,
+                params_arr = [],
+                queryString = (sourceURL.indexOf("?") !== -1) ? sourceURL.split("?")[1] : "";
+            if (queryString !== "") {
+                params_arr = queryString.split("&");
+                for (var i = params_arr.length - 1; i >= 0; i -= 1) {
+                    param = params_arr[i].split("=")[0];
+                    if (param === key) {
+                        params_arr.splice(i, 1);
+                    }
+                }
+                rtn = rtn + "?" + params_arr.join("&");
+            }
+            return rtn;
+        }
+
+
+        function changeLangue(lang) {
+
+            if (!window.location.origin) {
+                window.location.origin = window.location.protocol + "//"
+                    + window.location.hostname
+                    + (window.location.port ? ':' + window.location.port : '');
+            }
+
+            var url = window.location.origin + window.location.pathname;
+            var params = removeParam("request_locale", window.location.search);
+
+            if (params.length > 1) {
+                params = params + "&request_locale=" + lang;
+            }
+            else {
+                params = "?request_locale=" + lang;
+            }
+
+            window.location.href = url + params;
+        }
+        function initLanguage() {
+            var combo = document.formLang.langCombo;
+            var langue = '';
+            if (langue) {
+                for (i = 0; i < combo.length; i++) {
+                    if (combo.options[i].value == langue) {
+                        combo.selectedIndex = i;
+                    }
+                }
+            } else {
+                combo.selectedIndex = 0;
+            }
+        }
+    </script>
+    <script data-main="js/require-setup" src="require.js"></script>
+    <script>
+        function bindPopoverEvents() {
+            $('#webChat').on('hide.bs.popover', function () {
+                $("#webChatPrimaryIcon").show();
+                $("#webChatCloseIcon").hide();
+
+            })
+            $('#webChat').on('show.bs.popover', function () {
+                $("#webChatPrimaryIcon").hide();
+                $("#webChatCloseIcon").show();
+            })
+        }
+        // Loading Libary
+        require(['lib/jquery.min'], function ($) {
+
+            require(['lib/bootstrap.min'], function () {
+                require(['lib/propeller'], function () {
+                    console.log("Loaded :)");
+                    bindPopoverEvents()
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>

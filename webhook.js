@@ -24,7 +24,9 @@ app.get('/', function(req, res) {
 app.get('/chat', function(req, res) {
     res.sendFile(__dirname + '/chat.html');
 });
-
+app.get('/caccenter', function(req, res) {
+    res.sendFile(__dirname + '/caccenter.html');
+});
 app.post('/api/webhook', function(req, res) {
     console.log('Dialogflow Request body: ' + JSON.stringify(req.body));
     if (req.body.result) {
