@@ -196,6 +196,7 @@ app.post('/api/webhook', function(req, res) {
                     }]
                 }).end();
                 break;
+            /**--------Second scenario-Transfer agent START----------**/    
             case "caceis.nameCompanyIntent":
                 res.json({
                     messages: [
@@ -218,27 +219,50 @@ app.post('/api/webhook', function(req, res) {
                     ]
                 }).end();
                 break;
-            case "caceiscorporateActionQuery.caceiscorporateActionQuery-custom":
-                res.json({
-                    messages: [
-                        {
-                            "type": 0,
-                            "platform": "facebook",
-                            "speech": "Thanks for sharing the information. Could you please share your query ?."
-                        }
-                    ]
-                }).end();
+            case "caceiscorporateActionQuery.caceiscorporateActionQuery-getEntityId":
+                var entityId = req.body.result.parameters.entityId;            
+
+                return helper.getCustomerDetails(entityId).then((result) => {
+                    console.log('result count', result[0].count);
+                    if(result[0].count > 0) {
+                        res.json({
+                            messages: [{
+                                "type": 0,
+                                "platform": "facebook",
+                                "speech": "Thanks for sharing the information. Could you please share your query ?"
+                            }]
+                        }).end();
+                    } else {
+                        res.json({
+                            messages: [{
+                                "type": 0,
+                                "platform": "facebook",
+                                "speech": "Cant find entity information. Please check and try again."
+                            }]
+                        }).end();
+                    }
+                }).catch((err) => {
+                    console.log("err", err);
+                    res.send("Something went wrong");
+                });
                 break;
             case "caceiscorporateActionQuery.caceiscorporateActionQuery-custom.caceiscorporateActionQuery-custom-getEntityId-getQuery":
-                res.json({
-                    messages: [
-                        {
-                            "type": 0,
-                            "platform": "facebook",
-                            "speech": "You are talking about , ISIN number US0378831005 and  Stock name - Apple ?."
-                        }
-                    ]
-                }).end();
+                var securityName = req.body.result.parameters.securityName;
+                return helper.getSecurityDetailsByName('securityName').then((result) => {
+                    console.log(result);
+                    res.json({
+                        messages: [
+                            {
+                                "type": 0,
+                                "platform": "facebook",
+                                "speech": "You are talking about , ISIN number "+result[0].ISIN+" and  Stock name - "+result[0].Security_Name+" ?."
+                            }
+                        ]
+                    }).end();
+                }).catch((err) => {
+                    console.log("err", err);
+                    res.send("Something went wrong");
+                });
                 break;
             case "caceiscorporateActionQuery.caceiscorporateActionQuery-custom.caceiscorporateActionQuery-custom-getEntityId-getQuery.caceiscorporateActionQuery-custom-getEntityId-getQuery-confirmation":
                 res.json({
@@ -278,6 +302,7 @@ app.post('/api/webhook', function(req, res) {
                     ]
                 }).end();
                 break;
+            /**--------Second scenario-Transfer agent END----------**/ 
         }
     }
 });
@@ -301,9 +326,9 @@ app.post('/chatbot/savehistory', function(req, res) {
 });
 
 app.get('/test', function(req, res) {
-    return helper.getCustomerDetails('77777777').then((result) => {
-        console.log(result[0].count);
-        res.send("succ" + result[0].count)
+    return helper.getSecurityDetailsByName('porr').then((result) => {
+        console.log(result[0].Security_Name);
+        res.send("succ")
     }).catch((err) => {
         console.log("err", err);
         res.send("Something went wrong");

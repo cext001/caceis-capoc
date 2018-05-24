@@ -28,5 +28,15 @@ module.exports = {
                 resolve(result);
             });
         });
+    },
+    "getSecurityDetailsByName": function (securityName) {
+        return new Promise(function (resolve, reject) {
+            con.query("SELECT * FROM security WHERE Security_Name LIKE ?", [securityName+"%"], function (err, result, fields) {
+                if (err) {
+                    reject(err)
+                };
+                resolve(result)
+            });
+        });
     }
 };
