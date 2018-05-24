@@ -248,7 +248,7 @@ app.post('/api/webhook', function(req, res) {
                 break;
             case "caceiscorporateActionQuery.caceiscorporateActionQuery-custom.caceiscorporateActionQuery-custom-getEntityId-getQuery":
                 var securityName = req.body.result.parameters.securityName;
-                return helper.getSecurityDetailsByName('securityName').then((result) => {
+                return helper.getSecurityDetailsByName(securityName).then((result) => {
                     console.log(result);
                     res.json({
                         messages: [
@@ -326,8 +326,8 @@ app.post('/chatbot/savehistory', function(req, res) {
 });
 
 app.get('/test', function(req, res) {
-    return helper.getSecurityDetailsByName('porr').then((result) => {
-        console.log(result[0].Security_Name);
+    return helper.getSecurityDetailsByName('apple').then((result) => {
+        console.log(result[0].ISIN);
         res.send("succ")
     }).catch((err) => {
         console.log("err", err);
