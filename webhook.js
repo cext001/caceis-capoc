@@ -275,7 +275,7 @@ app.post('/api/webhook', function(req, res) {
                 });
                 break;
             case "caceiscorporateActionQuery.caceiscorporateActionQuery-custom.caceiscorporateActionQuery-custom-getEntityId-getQuery.caceiscorporateActionQuery-custom-getEntityId-getQuery-confirmation":
-                var isin = req.body.result.contexts[4].parameters.securityISIN;
+                var isin = req.body.result.contexts[5].parameters.securityISIN;
                 var companyName = req.body.result.contexts[0].parameters.companyName;
                 var customerId = req.body.result.contexts[0].parameters.entityId;
                 var shareCount = "";
