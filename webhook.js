@@ -275,22 +275,54 @@ app.post('/api/webhook', function(req, res) {
                 });
                 break;
             case "caceiscorporateActionQuery.caceiscorporateActionQuery-custom.caceiscorporateActionQuery-custom-getEntityId-getQuery.caceiscorporateActionQuery-custom-getEntityId-getQuery-confirmation":
+                var isin = req.body.result.contexts[4].parameters.securityISIN;
+                var companyName = req.body.result.contexts[0].parameters.companyName;
+                var customerId = req.body.result.contexts[0].parameters.entityId;
+                var shareCount = "";
+                var proportion = "";
+                var eventName = "";
+                console.log("isin: "+isin+" ,company name: "+companyName+" ,customerId: "+customerId);
+
+                return helper.getCustomersHoldingForISIN(customerId, isin).then((result) => {
+                    console.log(result[0]);
+                    shareCount = result[0].quantity;//result[0].Market_Value ? need to ask arul
+                }).catch((err) => {
+                    console.log("err", err);
+                    res.send("Something went wrong");
+                });
+
+                return helper.getCorporateActionInfoForSecurity(securityISIN).then((result) => {
+                    console.log(result[0]);
+                    proportion = result[0].Pershare_Offer;
+                    eventName = result[0].Event_Name;
+                }).catch((err) => {
+                    console.log("err", err);
+                    res.send("Something went wrong");
+                });
+
                 res.json({
                     messages: [
                         {
                             "type": 0,
                             "platform": "facebook",
-                            "speech": "Holdings on this ISIN from JP Morgan is 1,57,000 shares"
+                            "speech": "Holdings on this ISIN from "+companyName+" is "+shareCount+" shares"
                         },
                         {
                             "type": 0,
                             "platform": "facebook",
-                            "speech": "Rights issue is offered at 2:1 @ Rs 25. What is your query about ?"
+                            "speech": eventName+" issue is offered at "+proportion+":1 @ Rs 25. What is your query about ?"
                         }
                     ]
                 }).end();
                 break;
             case "caceis.corporateActionQueryFinialise":
+                return helper.getTradeStatusBySecurityIdAndCustomerId('US0378331005','11111111').then((result) => {
+                    console.log(result[0]);
+                    res.send("succ")
+                }).catch((err) => {
+                    console.log("err", err);
+                    res.send("Something went wrong");
+                });
                 res.json({
                     messages: [
                         {
@@ -336,8 +368,8 @@ app.post('/chatbot/savehistory', function(req, res) {
 });
 
 app.get('/test', function(req, res) {
-    return helper.getSecurityDetailsByName('apple').then((result) => {
-        console.log(result[0].ISIN);
+    return helper.getCorporateActionInfoForSecurity('US0378331005').then((result) => {
+        console.log(result[0]);
         res.send("succ")
     }).catch((err) => {
         console.log("err", err);

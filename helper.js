@@ -38,5 +38,35 @@ module.exports = {
                 resolve(result)
             });
         });
+    },
+    "getCustomersHoldingForISIN": function (customerId, ISIN) {
+        return new Promise(function (resolve, reject) {
+            con.query("SELECT * FROM holdingtable WHERE customer_ID= ? AND Security_ID=?", [customerId, ISIN], function (err, result, fields) {
+                if (err) {
+                    reject(err)
+                };
+                resolve(result)
+            });
+        });
+    },
+    "getTradeStatusBySecurityIdAndCustomerId": function (securityId,customerId) {
+        return new Promise(function (resolve, reject) {
+            con.query("SELECT * FROM tradetable WHERE Security_ID=? AND customer_ID= ? ", [securityId,customerId], function (err, result, fields) {
+                if (err) {
+                    reject(err)
+                };
+                resolve(result)
+            });
+        });
+    },
+    "getCorporateActionInfoForSecurity": function (securityId) {
+        return new Promise(function (resolve, reject) {
+            con.query("SELECT * FROM corporateactionevent WHERE Security_ID=?", [securityId], function (err, result, fields) {
+                if (err) {
+                    reject(err)
+                };
+                resolve(result)
+            });
+        });
     }
 };
