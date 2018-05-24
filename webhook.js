@@ -255,7 +255,16 @@ app.post('/api/webhook', function(req, res) {
                             {
                                 "type": 0,
                                 "platform": "facebook",
-                                "speech": "You are talking about , ISIN number "+result[0].ISIN+" and  Stock name - "+result[0].Security_Name+" ?."
+                                "speech": "You are talking about , ISIN number "+result[0].ISIN+" and  Stock name - "+result[0].Security_Name+" ?"
+                            }
+                        ],
+                        contextOut: [
+                            {
+                                name: "isin-info",
+                                parameters: {
+                                    securityIsin: result[0].ISIN
+                                },
+                                lifespan: 5
                             }
                         ]
                     }).end();
