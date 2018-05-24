@@ -197,15 +197,86 @@ app.post('/api/webhook', function(req, res) {
                 }).end();
                 break;
             case "caceis.nameCompanyIntent":
-            res.json({
-                messages: [
-                    {
-                        "type": 0,
-                        "platform": "facebook",
-                        "speech": "Can you tell me in a few words how I can help you ?."
-                    }
-                ]
-            }).end();
+                res.json({
+                    messages: [
+                        {
+                            "type": 0,
+                            "platform": "facebook",
+                            "speech": "Can you tell me in a few words how I can help you ?."
+                        }
+                    ]
+                }).end();
+                break;
+            case "caceis.corporateActionQuery":
+                res.json({
+                    messages: [
+                        {
+                            "type": 0,
+                            "platform": "facebook",
+                            "speech": "Can you tell me entity id of your company with us."
+                        }
+                    ]
+                }).end();
+                break;
+            case "caceiscorporateActionQuery.caceiscorporateActionQuery-custom":
+                res.json({
+                    messages: [
+                        {
+                            "type": 0,
+                            "platform": "facebook",
+                            "speech": "Thanks for sharing the information. Could you please share your query ?."
+                        }
+                    ]
+                }).end();
+                break;
+            case "caceiscorporateActionQuery.caceiscorporateActionQuery-custom.caceiscorporateActionQuery-custom-getEntityId-getQuery":
+                res.json({
+                    messages: [
+                        {
+                            "type": 0,
+                            "platform": "facebook",
+                            "speech": "You are talking about , ISIN number US0378831005 and  Stock name - Apple ?."
+                        }
+                    ]
+                }).end();
+                break;
+            case "caceiscorporateActionQuery.caceiscorporateActionQuery-custom.caceiscorporateActionQuery-custom-getEntityId-getQuery.caceiscorporateActionQuery-custom-getEntityId-getQuery-confirmation":
+                res.json({
+                    messages: [
+                        {
+                            "type": 0,
+                            "platform": "facebook",
+                            "speech": "Holdings on this ISIN from JP Morgan is 1,57,000 shares"
+                        },
+                        {
+                            "type": 0,
+                            "platform": "facebook",
+                            "speech": "Rights issue is offered at 2:1 @ Rs 25. What is your query about ?"
+                        }
+                    ]
+                }).end();
+                break;
+            case "caceis.corporateActionQueryFinialise":
+                res.json({
+                    messages: [
+                        {
+                            "type": 0,
+                            "platform": "facebook",
+                            "speech": "I see. I would like to inform that 2000 quanity of apple shares are not yet settled ."
+                        }
+                    ]
+                }).end();
+                break;
+            case "caceiscorporateActionQueryFinialise-confirm":
+                res.json({
+                    messages: [
+                        {
+                            "type": 0,
+                            "platform": "facebook",
+                            "speech": "Important date for the corporate actions for your reference.\n\nLast date for response - 21-05-2018\n\nPayment date - 25-05-2018\n\nSettlement date - 28-05-2018"
+                        }
+                    ]
+                }).end();
                 break;
         }
     }
