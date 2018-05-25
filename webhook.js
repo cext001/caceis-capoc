@@ -287,12 +287,12 @@ app.post('/api/webhook', function(req, res) {
                 });
                 break;
             case "caceiscorporateActionQuery.caceiscorporateActionQuery-custom.caceiscorporateActionQuery-custom-getEntityId-getQuery.caceiscorporateActionQuery-custom-getEntityId-getQuery-confirmation":
-                var isin = req.body.result.contexts[5].parameters.securityISIN;
+                var isin = req.body.result.contexts[6].parameters.securityISIN;
                 var companyName = req.body.result.contexts[0].parameters.companyName;
                 var customerId = req.body.result.contexts[0].parameters.entityId;
                 console.log("isin: "+isin+" ,company name: "+companyName+" ,customerId: "+customerId);                
 
-                return helper.getHoldingAndCorporateActionData("99999999", "US0378331005").then((result) => {
+                return helper.getHoldingAndCorporateActionData(customerId, isin).then((result) => {
                     console.log('Holdings data',result[0][0]);
                     console.log('Holdings data row count',result[0].length);
                     console.log('corporate action data',result[1][0]);
