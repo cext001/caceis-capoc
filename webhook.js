@@ -223,9 +223,9 @@ app.post('/api/webhook', function(req, res) {
                 var entityId = req.body.result.parameters.entityId;            
 
                 return helper.getCustomerDetails(entityId).then((result) => {
-                    console.log('customer info', result[0]);
-                    console.log('customer info row count', result[0].length);
-                    if(result[0].length > 0) {
+                    console.log('customer info', result);
+                    console.log('customer info row count', result.length);
+                    if(result.length > 0) {
                         res.json({
                             messages: [{
                                 "type": 0,
@@ -236,8 +236,8 @@ app.post('/api/webhook', function(req, res) {
                                 {
                                     name: "customer-info",
                                     parameters: {
-                                        Customer_Name: result[1][0].Customer_Name,
-                                        Customer_ID: result[1][0].Customer_ID
+                                        Customer_Name: result[0].Customer_Name,
+                                        Customer_ID: result[0].Customer_ID
                                     },
                                     lifespan: 5
                                 }
@@ -260,8 +260,8 @@ app.post('/api/webhook', function(req, res) {
             case "caceiscorporateActionQuery.caceiscorporateActionQuery-custom.caceiscorporateActionQuery-custom-getEntityId-getQuery":
                 var securityName = req.body.result.parameters.securityName;
                 return helper.getSecurityDetailsByName(securityName).then((result) => {
-                    console.log("securityinfo",result[0]);
-                    console.log("securityinfo row count",result[0].length);
+                    console.log("securityinfo",result);
+                    console.log("securityinfo row count",result.length);
                     res.json({
                         messages: [
                             {
@@ -293,8 +293,10 @@ app.post('/api/webhook', function(req, res) {
                 console.log("isin: "+isin+" ,company name: "+companyName+" ,customerId: "+customerId);                
 
                 return helper.getHoldingAndCorporateActionData("99999999", "US0378331005").then((result) => {
-                    console.log('rs1',result[0][0]);
-                    console.log('rs2',result[1][0]);
+                    console.log('Holdings data',result[0][0]);
+                    console.log('Holdings data row count',result[0].length);
+                    console.log('corporate action data',result[1][0]);
+                    console.log('corporate action data',result[1].length);
                     
                     res.json({
                         messages: [
@@ -335,8 +337,8 @@ app.post('/api/webhook', function(req, res) {
                 console.log("isin: "+isin+", customerId: "+customerId);    
 
                 return helper.getTradeStatusBySecurityIdAndCustomerId(isin,customerId).then((result) => {
-                    console.log("tradeinfo",result[0]);
-                    console.log("tradeinfo row count",result[0].length);
+                    console.log("tradeinfo",result);
+                    console.log("tradeinfo row count",result.length);
                     var message = (result[0].Status == 'Settled') ? "I see. I would like to inform that 2000 quanity of "+securityName+" shares are not yet "+result[0].Status+"." : "I see. I would like to inform that 2000 quanity of "+securityName+" shares are "+result[0].Status+".";
                     res.json({
                             messages: [
