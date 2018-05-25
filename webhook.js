@@ -331,7 +331,7 @@ app.post('/api/webhook', function(req, res) {
                
                 break;
             case "caceis.corporateActionQueryFinialise":
-                var securityName = req.body.result.contexts[4].parameters.securityName;
+                var securityName = req.body.result.contexts[5].parameters.securityName;
                 var customerId = req.body.result.contexts[0].parameters.entityId;
                 var isin = req.body.result.contexts[5].parameters.securityISIN;
                 console.log("isin: "+isin+", customerId: "+customerId+" , securityName: "+securityName);    
