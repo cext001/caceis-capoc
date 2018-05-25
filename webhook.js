@@ -231,7 +231,17 @@ app.post('/api/webhook', function(req, res) {
                                 "type": 0,
                                 "platform": "facebook",
                                 "speech": "Thanks for sharing the information. Could you please share your query ?"
-                            }]
+                            }],
+                            contextOut: [
+                                {
+                                    name: "customer-info",
+                                    parameters: {
+                                        Customer_Name: result[1][0].Customer_Name,
+                                        Customer_ID: result[1][0].Customer_ID
+                                    },
+                                    lifespan: 5
+                                }
+                            ]
                         }).end();
                     } else {
                         res.json({
