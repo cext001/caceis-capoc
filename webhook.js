@@ -298,32 +298,41 @@ app.post('/api/webhook', function(req, res) {
                     console.log('corporate action data',result[1][0]);
                     console.log('corporate action data',result[1].length);
                     
+                    var holdingsInfo = (result[0].length > 0) 
+                                        ? "Holdings on this ISIN from "+companyName+" is "+result[0][0].quantity+" shares" 
+                                        : "Unable to find holdings for this ISIN from "+companyName ;
+                    var corporateActionInfo = (result[1].length > 0) 
+                                                ? result[1][0].Event_Name+" issue is offered at "+result[1][0].Pershare_Offer+":1 @ Rs "+result[1][0].Pershare_Offer+". What is your query about ?"
+                                                :  "Unable to find records for the corporate action events for the ISIN" ;
+                    var contextArray = (result[1].length > 0) 
+                                        ? [
+                                                {
+                                                    name: "corporateactionvent-info",
+                                                    parameters: {
+                                                        Event_Date: result[1][0].Event_Date,
+                                                        Payment_Date: result[1][0].Payment_Date,
+                                                        Settlement_Date: result[1][0].Settlement_Date
+                                                    },
+                                                    lifespan: 5
+                                                }
+                                            ] 
+                                        : [];                            
+                                                
                     res.json({
                         messages: [
                             {
                                 "type": 0,
                                 "platform": "facebook",
-                                "speech": "Holdings on this ISIN from "+companyName+" is "+result[0][0].quantity+" shares"//result[0][0].Market_Value ? need to ask arul
+                                "speech": holdingsInfo
                             },
                             {
                                 "type": 0,
                                 "platform": "facebook",
-                                "speech": result[1][0].Event_Name+" issue is offered at "+result[1][0].Pershare_Offer+":1 @ Rs "+result[1][0].Pershare_Offer+". What is your query about ?"
+                                "speech": corporateActionInfo
                             }
                         ],
-                        contextOut: [
-                            {
-                                name: "corporateactionvent-info",
-                                parameters: {
-                                    Event_Date: result[1][0].Event_Date,
-                                    Payment_Date: result[1][0].Payment_Date,
-                                    Settlement_Date: result[1][0].Settlement_Date
-                                },
-                                lifespan: 5
-                            }
-                        ]
+                        contextOut: contextArray
                     }).end();
-
                 }).catch((err) => {
                     console.log("err", err);
                     res.send("Something went wrong");
@@ -340,9 +349,9 @@ app.post('/api/webhook', function(req, res) {
                     console.log("tradeinfo",result);
                     console.log("tradeinfo row count",result.length);
                     if(result.length > 0) {
-                        var message = (result[0].Status == 'Settled') ? 
-                            "I see. I would like to inform that 2000 quanity of "+securityName+" shares are not yet "+result[0].Status+"." : 
-                            "I see. I would like to inform that 2000 quanity of "+securityName+" shares are "+result[0].Status+".";
+                        var message = (result[0].Status == 'Settled') 
+                            ? "I see. I would like to inform that 2000 quanity of "+securityName+" shares are not yet "+result[0].Status+"."
+                            : "I see. I would like to inform that 2000 quanity of "+securityName+" shares are "+result[0].Status+".";
                         res.json({
                             messages: [
                                 {
