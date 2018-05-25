@@ -10,7 +10,7 @@ var con = mysql.createConnection({
 module.exports = {
     "getCustomerDetails": function (customerId) {
         return new Promise(function (resolve, reject) {
-            con.query("SELECT * as count FROM customer WHERE Customer_ID=?", [customerId], function (err, result, fields) {
+            con.query("SELECT * FROM customer WHERE Customer_ID=?", [customerId], function (err, result, fields) {
                 if (err) {
                     reject(err)
                 };
