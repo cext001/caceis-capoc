@@ -68,5 +68,15 @@ module.exports = {
                 resolve(result)
             });
         });
+    },
+    "getHoldingAndCorporateActionData": function (customerId,securityId) {
+        return new Promise(function (resolve, reject) {
+            con.query("CALL getHoldingAndCorporateActionData(?, ?)", [customerId,securityId], function (err, result, fields) {
+                if (err) {
+                    reject(err)
+                };
+                resolve(result)
+            });
+        });
     }
 };

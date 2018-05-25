@@ -275,45 +275,35 @@ app.post('/api/webhook', function(req, res) {
                 });
                 break;
             case "caceiscorporateActionQuery.caceiscorporateActionQuery-custom.caceiscorporateActionQuery-custom-getEntityId-getQuery.caceiscorporateActionQuery-custom-getEntityId-getQuery-confirmation":
-                var isin = req.body.result.contexts[5].parameters.securityISIN;
+                var isin = req.body.result.contexts[4].parameters.securityISIN;
                 var companyName = req.body.result.contexts[0].parameters.companyName;
                 var customerId = req.body.result.contexts[0].parameters.entityId;
-                var shareCount = "";
-                var proportion = "";
-                var eventName = "";
-                console.log("isin: "+isin+" ,company name: "+companyName+" ,customerId: "+customerId);
+                console.log("isin: "+isin+" ,company name: "+companyName+" ,customerId: "+customerId);                
 
-                return helper.getCustomersHoldingForISIN(customerId, isin).then((result) => {
-                    console.log(result[0]);
-                    shareCount = result[0].quantity;//result[0].Market_Value ? need to ask arul
+                return helper.getHoldingAndCorporateActionData("99999999", "US0378331005").then((result) => {
+                    console.log('rs1',result[0][0]);
+                    console.log('rs2',result[1][0]);
+                    
+                    res.json({
+                        messages: [
+                            {
+                                "type": 0,
+                                "platform": "facebook",
+                                "speech": "Holdings on this ISIN from "+companyName+" is "+result[0][0].quantity+" shares"//result[0][0].Market_Value ? need to ask arul
+                            },
+                            {
+                                "type": 0,
+                                "platform": "facebook",
+                                "speech": result[1][0].Event_Name+" issue is offered at "+result[1][0].Pershare_Offer+":1 @ Rs 25. What is your query about ?"
+                            }
+                        ]
+                    }).end();
+
                 }).catch((err) => {
                     console.log("err", err);
                     res.send("Something went wrong");
                 });
-
-                return helper.getCorporateActionInfoForSecurity(securityISIN).then((result) => {
-                    console.log(result[0]);
-                    proportion = result[0].Pershare_Offer;
-                    eventName = result[0].Event_Name;
-                }).catch((err) => {
-                    console.log("err", err);
-                    res.send("Something went wrong");
-                });
-
-                res.json({
-                    messages: [
-                        {
-                            "type": 0,
-                            "platform": "facebook",
-                            "speech": "Holdings on this ISIN from "+companyName+" is "+shareCount+" shares"
-                        },
-                        {
-                            "type": 0,
-                            "platform": "facebook",
-                            "speech": eventName+" issue is offered at "+proportion+":1 @ Rs 25. What is your query about ?"
-                        }
-                    ]
-                }).end();
+               
                 break;
             case "caceis.corporateActionQueryFinialise":
                 return helper.getTradeStatusBySecurityIdAndCustomerId('US0378331005','11111111').then((result) => {
@@ -368,8 +358,9 @@ app.post('/chatbot/savehistory', function(req, res) {
 });
 
 app.get('/test', function(req, res) {
-    return helper.getCorporateActionInfoForSecurity('US0378331005').then((result) => {
-        console.log(result[0]);
+    return helper.getHoldingAndCorporateActionData("99999999", "US0378331005").then((result) => {
+        console.log('rs1',result[0][0]);
+        console.log('rs2',result[1][0]);
         res.send("succ")
     }).catch((err) => {
         console.log("err", err);
