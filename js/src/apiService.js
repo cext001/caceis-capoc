@@ -79,6 +79,10 @@ define(['jquery', 'settings', 'utils', 'messageTemplates', 'cards', 'uuid'],
                                 if (value.name == "customer-name") {
                                     customerName = value.parameters.firstName;
                                 }
+                                if(value.name == "name-company-info") {
+                                    customerId = value.parameters.entityId;
+                                    customerName = value.parameters.firstName;
+                                }
                             });
 
                             $.ajax({
