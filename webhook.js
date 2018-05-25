@@ -340,12 +340,17 @@ app.post('/api/webhook', function(req, res) {
                     });                
                 break;
             case "caceiscorporateActionQueryFinialise-confirm":
+                var Event_Date = req.body.result.contexts[4].parameters.Event_Date;
+                var Settlement_Date = req.body.result.contexts[4].parameters.Settlement_Date;
+                var Payment_Date = req.body.result.contexts[4].parameters.Payment_Date;
+                console.log("Payment_Date: "+Payment_Date+" ,Settlement_Date: "+Settlement_Date+" ,Event_Date:"+Event_Date);
+                
                 res.json({
                     messages: [
                         {
                             "type": 0,
                             "platform": "facebook",
-                            "speech": "Important date for the corporate actions for your reference.\n\nLast date for response - 21-05-2018\n\nPayment date - 25-05-2018\n\nSettlement date - 28-05-2018"
+                            "speech": "Important date for the corporate actions for your reference.\n\nLast date for response - "+Event_Date+"\n\nPayment date - "+Payment_Date+"\n\nSettlement date - "+Settlement_Date+""
                         }
                     ]
                 }).end();
