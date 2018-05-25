@@ -369,9 +369,9 @@ app.post('/api/webhook', function(req, res) {
                 });                    
                 break;
             case "caceiscorporateActionQueryFinialise-confirm":
-                var Event_Date = req.body.result.contexts[4].parameters.Event_Date;
-                var Settlement_Date = req.body.result.contexts[4].parameters.Settlement_Date;
-                var Payment_Date = req.body.result.contexts[4].parameters.Payment_Date;
+                var Event_Date = req.body.result.contexts[7].parameters.Event_Date;
+                var Settlement_Date = req.body.result.contexts[7].parameters.Settlement_Date;
+                var Payment_Date = req.body.result.contexts[7].parameters.Payment_Date;
                 console.log("Payment_Date: "+Payment_Date+" ,Settlement_Date: "+Settlement_Date+" ,Event_Date:"+Event_Date);
 
                 res.json({
