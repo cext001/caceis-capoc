@@ -220,7 +220,9 @@ app.post('/api/webhook', function(req, res) {
                 }).end();
                 break;
             case "caceiscorporateActionQuery.caceiscorporateActionQuery-getEntityId":
-                var entityId = req.body.result.parameters.entityId;            
+                var entityId = req.body.result.parameters.entityId;
+                var companyName = req.body.result.contexts[0].parameters.companyName;
+                console.log("entityId :"+entityId+" ,companyName: "+companyName);            
 
                 return helper.getCustomerDetails(entityId).then((result) => {
                     console.log('customer info', result);
@@ -349,15 +351,12 @@ app.post('/api/webhook', function(req, res) {
                     console.log("tradeinfo",result);
                     console.log("tradeinfo row count",result.length);
                     if(result.length > 0) {
-                        var message = (result[0].Status == 'Settled') 
-                            ? "I see. I would like to inform that 2000 quanity of "+securityName+" shares are not yet "+result[0].Status+"."
-                            : "I see. I would like to inform that 2000 quanity of "+securityName+" shares are "+result[0].Status+".";
                         res.json({
                             messages: [
                                 {
                                     "type": 0,
                                     "platform": "facebook",
-                                    "speech": message
+                                    "speech": "I see. I would like to inform that 2000 quanity of "+securityName+" shares are "+result[0].Status+"."
                                 }
                             ]
                         }).end();                        
