@@ -223,8 +223,9 @@ app.post('/api/webhook', function(req, res) {
                 var entityId = req.body.result.parameters.entityId;            
 
                 return helper.getCustomerDetails(entityId).then((result) => {
-                    console.log('result count', result[0].count);
-                    if(result[0].count > 0) {
+                    console.log('customer info', result[0]);
+                    console.log('customer info row count', result[0].length);
+                    if(result[0].length > 0) {
                         res.json({
                             messages: [{
                                 "type": 0,
@@ -249,7 +250,8 @@ app.post('/api/webhook', function(req, res) {
             case "caceiscorporateActionQuery.caceiscorporateActionQuery-custom.caceiscorporateActionQuery-custom-getEntityId-getQuery":
                 var securityName = req.body.result.parameters.securityName;
                 return helper.getSecurityDetailsByName(securityName).then((result) => {
-                    console.log(result);
+                    console.log("securityinfo",result[0]);
+                    console.log("securityinfo row count",result[0].length);
                     res.json({
                         messages: [
                             {
@@ -324,6 +326,7 @@ app.post('/api/webhook', function(req, res) {
 
                 return helper.getTradeStatusBySecurityIdAndCustomerId(isin,customerId).then((result) => {
                     console.log("tradeinfo",result[0]);
+                    console.log("tradeinfo row count",result[0].length);
                     var message = (result[0].Status == 'Settled') ? "I see. I would like to inform that 2000 quanity of "+securityName+" shares are not yet "+result[0].Status+"." : "I see. I would like to inform that 2000 quanity of "+securityName+" shares are "+result[0].Status+".";
                     res.json({
                             messages: [
