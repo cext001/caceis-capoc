@@ -355,6 +355,17 @@ app.post('/api/webhook', function(req, res) {
                     ]
                 }).end();
                 break;
+            case "caceiscorporateActionQueryFinialise-confirm.caceiscorporateActionQueryFinialise-confirm-thank":
+                res.json({
+                    messages: [
+                        {
+                            "type": 0,
+                            "platform": "facebook",
+                            "speech": "Happy to help you. Have a nice day!"
+                        }
+                    ]
+                }).end();
+                break;
             /**--------Second scenario-Transfer agent END----------**/ 
         }
     }
