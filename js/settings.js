@@ -12,7 +12,7 @@ define({
     applicationTitle: "IncDemo",
     userTitle: "Me",
     botTitle: "incDemo",
-    botAvatar: "./avatar/chatbox-icon.png",
+    botAvatar: "./avatar/chatbox-icon.jpg",
     userAvatar: "avatar/user.png",
     attachmentUploadURL: "",
     platform: "facebook",
