@@ -308,7 +308,7 @@ app.post('/api/webhook', function(req, res) {
                             {
                                 "type": 0,
                                 "platform": "facebook",
-                                "speech": result[1][0].Event_Name+" issue is offered at "+result[1][0].Pershare_Offer+":1 @ Rs 25. What is your query about ?"
+                                "speech": result[1][0].Event_Name+" issue is offered at "+result[1][0].Pershare_Offer+":1 @ Rs "+result[1][0].Pershare_Offer+". What is your query about ?"
                             }
                         ],
                         contextOut: [
@@ -333,14 +333,17 @@ app.post('/api/webhook', function(req, res) {
             case "caceis.corporateActionQueryFinialise":
                 var securityName = req.body.result.contexts[4].parameters.securityName;
                 var customerId = req.body.result.contexts[0].parameters.entityId;
-                var isin = req.body.result.contexts[4].parameters.securityISIN;
-                console.log("isin: "+isin+", customerId: "+customerId);    
+                var isin = req.body.result.contexts[5].parameters.securityISIN;
+                console.log("isin: "+isin+", customerId: "+customerId+" , securityName: "+securityName);    
 
                 return helper.getTradeStatusBySecurityIdAndCustomerId(isin,customerId).then((result) => {
                     console.log("tradeinfo",result);
                     console.log("tradeinfo row count",result.length);
-                    var message = (result[0].Status == 'Settled') ? "I see. I would like to inform that 2000 quanity of "+securityName+" shares are not yet "+result[0].Status+"." : "I see. I would like to inform that 2000 quanity of "+securityName+" shares are "+result[0].Status+".";
-                    res.json({
+                    if(result.length > 0) {
+                        var message = (result[0].Status == 'Settled') ? 
+                            "I see. I would like to inform that 2000 quanity of "+securityName+" shares are not yet "+result[0].Status+"." : 
+                            "I see. I would like to inform that 2000 quanity of "+securityName+" shares are "+result[0].Status+".";
+                        res.json({
                             messages: [
                                 {
                                     "type": 0,
@@ -348,11 +351,22 @@ app.post('/api/webhook', function(req, res) {
                                     "speech": message
                                 }
                             ]
+                        }).end();                        
+                    } else {
+                        res.json({
+                            messages: [
+                                {
+                                    "type": 0,
+                                    "platform": "facebook",
+                                    "speech": "Trade info not found the the system."
+                                }
+                            ]
                         }).end();
-                    }).catch((err) => {
-                        console.log("err", err);
-                        res.send("Something went wrong");
-                    });                
+                    }
+                }).catch((err) => {
+                    console.log("err", err);
+                    res.send("Something went wrong");
+                });                    
                 break;
             case "caceiscorporateActionQueryFinialise-confirm":
                 var Event_Date = req.body.result.contexts[4].parameters.Event_Date;
