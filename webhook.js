@@ -296,6 +296,17 @@ app.post('/api/webhook', function(req, res) {
                                 "platform": "facebook",
                                 "speech": result[1][0].Event_Name+" issue is offered at "+result[1][0].Pershare_Offer+":1 @ Rs 25. What is your query about ?"
                             }
+                        ],
+                        contextOut: [
+                            {
+                                name: "corporateactionvent-info",
+                                parameters: {
+                                    Event_Date: result[1][0].Event_Date,
+                                    Payment_Date: result[1][0].Payment_Date,
+                                    Settlement_Date: result[1][0].Settlement_Date
+                                },
+                                lifespan: 5
+                            }
                         ]
                     }).end();
 
@@ -306,22 +317,27 @@ app.post('/api/webhook', function(req, res) {
                
                 break;
             case "caceis.corporateActionQueryFinialise":
-                return helper.getTradeStatusBySecurityIdAndCustomerId('US0378331005','11111111').then((result) => {
-                    console.log(result[0]);
-                    res.send("succ")
-                }).catch((err) => {
-                    console.log("err", err);
-                    res.send("Something went wrong");
-                });
-                res.json({
-                    messages: [
-                        {
-                            "type": 0,
-                            "platform": "facebook",
-                            "speech": "I see. I would like to inform that 2000 quanity of apple shares are not yet settled ."
-                        }
-                    ]
-                }).end();
+                var securityName = req.body.result.contexts[4].parameters.securityName;
+                var customerId = req.body.result.contexts[0].parameters.entityId;
+                var isin = req.body.result.contexts[4].parameters.securityISIN;
+                console.log("isin: "+isin+", customerId: "+customerId);    
+
+                return helper.getTradeStatusBySecurityIdAndCustomerId(isin,customerId).then((result) => {
+                    console.log("tradeinfo",result[0]);
+                    var message = (result[0].Status == 'Settled') ? "I see. I would like to inform that 2000 quanity of "+securityName+" shares are "+result[0].Status+"." : "I see. I would like to inform that 2000 quanity of "+securityName+" shares are not yet "+result[0].Status+".";
+                    res.json({
+                            messages: [
+                                {
+                                    "type": 0,
+                                    "platform": "facebook",
+                                    "speech": message
+                                }
+                            ]
+                        }).end();
+                    }).catch((err) => {
+                        console.log("err", err);
+                        res.send("Something went wrong");
+                    });                
                 break;
             case "caceiscorporateActionQueryFinialise-confirm":
                 res.json({
