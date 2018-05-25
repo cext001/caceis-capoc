@@ -188,7 +188,7 @@ app.post('/api/webhook', function(req, res) {
                     }]
                 }).end();
                 break;
-            case "caies.thankIntent":
+            case "caceis.thankAndBye":
                 res.json({
                     messages: [{
                         "type": 0,
@@ -351,17 +351,6 @@ app.post('/api/webhook', function(req, res) {
                             "type": 0,
                             "platform": "facebook",
                             "speech": "Important date for the corporate actions for your reference.\n\nLast date for response - "+Event_Date+"\n\nPayment date - "+Payment_Date+"\n\nSettlement date - "+Settlement_Date+""
-                        }
-                    ]
-                }).end();
-                break;
-            case "caceiscorporateActionQueryFinialise-confirm.caceiscorporateActionQueryFinialise-confirm-thank":
-                res.json({
-                    messages: [
-                        {
-                            "type": 0,
-                            "platform": "facebook",
-                            "speech": "Happy to help you. Have a nice day!"
                         }
                     ]
                 }).end();
