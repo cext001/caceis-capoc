@@ -48,55 +48,39 @@
     </style>
 </head>
 
-
 <body style="background:url('public/img/fond_connexion.jpg')">
-
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="/"><img width="150" class="img-responsive" src="public/img/logo.png"></a>
+                <a class="navbar-brand" href="/">
+                    <img width="150" class="img-responsive" src="public/img/logo.png">
+                </a>
             </div>
-            <h5 class="heading-h5"><b>CACC</b> | Corporate Action Communication Center</h5>
+            <h5 class="heading-h5">
+                <b>CACC</b> | Corporate Action Communication Center</h5>
             <div class="pull-right language-top">
                 <form id="formLang" name="formLang" action="formLang">
                     <select name="langCombo" tabindex="50" id="langCombo" onchange="changeLangue(formLang.langCombo.options[selectedIndex].value);">
-    <option value="fr">Français</option>
-    <option value="en" selected="selected">English</option>
-    <option value="de">Deutsch</option>
-    <option value="es">Español</option>
-    <option value="nl">Nederlandse</option>
-    <option value="pt">Português</option>
-    <option value="it">Italiano</option>
-    <option value="br">Brasileiro</option>
-
-
-</select>
+                        <option value="fr">Français</option>
+                        <option value="en" selected="selected">English</option>
+                        <option value="de">Deutsch</option>
+                        <option value="es">Español</option>
+                        <option value="nl">Nederlandse</option>
+                        <option value="pt">Português</option>
+                        <option value="it">Italiano</option>
+                        <option value="br">Brasileiro</option>
+                    </select>
                 </form>
-
             </div>
     </nav>
 
     <div class="container">
-
-
         <div class="colcenter">
-
-
             <div class="box">
                 <!-- contenu de la page -->
-
-
-
-
-
                 <form id="login_noIdentifier_input" name="noIdentifierForm" onsubmit="return true;" action="/actionnaire/auth/login.noIdentifier.input.action"
                     method="post">
                 </form>
-
-
-
-
-
 
                 <div class="identificationbox">
                     <div class="messageTitle">
@@ -108,13 +92,16 @@
                             <table style="margin: auto;">
                                 <tr>
                                     <td align="right">Login &nbsp;</td>
-                                    <td align="left"><input type="text" autocomplete="off" name="login" size="25" maxlength="12" value=""
-                                            tabindex="1" id="login" />&nbsp;<a class="help" href="#" onclick="showHelpLogin()"></a></td>
+                                    <td align="left">
+                                        <input type="text" autocomplete="off" name="login" size="25" maxlength="12" value="" tabindex="1" id="login" />&nbsp;
+                                        <a class="help" href="#" onclick="showHelpLogin()"></a>
+                                    </td>
 
                                 </tr>
                                 <tr>
-                                    <td colspan="2" align="center" style="padding-top: 10px;"><input type="button" class="bouton" tabindex="3" value="Lost login" onclick="document.noIdentifierForm.submit();"
-                                        /> <input type="submit" class="bouton" value="Validate" tabindex="4" />
+                                    <td colspan="2" align="center" style="padding-top: 10px;">
+                                        <input type="button" class="bouton" tabindex="3" value="Lost login" onclick="document.noIdentifierForm.submit();" />
+                                        <input type="submit" class="bouton" value="Validate" tabindex="4" />
                                     </td>
                                 </tr>
                                 <tr>
@@ -122,32 +109,35 @@
                                 </tr>
                             </table>
                         </form>
-
-
-
-
                     </div>
                 </div>
 
-                <div> <a> <img class="img-responsive" style="padding:20px 0px 35px 0px" alt="" src="public/img/encart-accueil.png"> </a>                    </div>
-
-
-
-
+                <div>
+                    <a>
+                        <img class="img-responsive" style="padding:20px 0px 35px 0px" alt="" src="public/img/encart-accueil.png">
+                    </a>
+                </div>
             </div>
         </div>
         <div class="colright">
             <div class="colrightimg"></div>
         </div>
     </div>
-    <a style="margin-bottom:15px;margin-right:10px;position:fixed;bottom: 0px;right: 7px;z-index:1000;background-color:#c20a37;"
-        class="btn pmd-btn-fab  pull-right pmd-btn-raised pmd-ripple-effect  btn-primary" id="webChat" data-trigger="click" data-toggle="popover"
-        data-placement="top" data-content="<iframe  src='https://caceis-capoc.herokuapp.com/chat.html?popup=1' height='510' width='250' style='border:none'></iframe>"
-        data-html="true" href="javascript:void(0);">
+        <a style="margin-bottom:15px;margin-right:10px;position:fixed;bottom: 0px;right: 7px;z-index:1000;background-color:#c20a37;"
+            class="btn pmd-btn-fab  pull-right pmd-btn-raised pmd-ripple-effect  btn-primary" id="webChat" data-trigger="click" data-toggle="popover"
+            data-placement="top" data-content="<iframe  src='https://caceis-capoc.herokuapp.com/chat.html?popup=1' height='510' width='250' style='border:none'></iframe>"
+            data-html="true" href="javascript:void(0);">
             <span class="pmd-floating-hidden">Primary</span>
             <i id="webChatPrimaryIcon" class="material-icons md-light pmd-sm">chat</i>
             <i id="webChatCloseIcon" class="material-icons md-light pmd-sm" style="display: none">close</i>
-          </a>
+        </a>
+        <!--<a class="btn pmd-btn-fab pmd-btn-raised pmd-ripple-effect  btn-primary" id="webChat" data-trigger="click" data-toggle="popover"
+            data-placement="top" data-content="<iframe  src='http://localhost:3000/chat.html?popup=1' height='510' width='300' style='border:none'></iframe>"
+            data-html="true" href="javascript:void(0);">
+            <span class="pmd-floating-hidden">Primary</span>
+            <i id="webChatPrimaryIcon" class="material-icons md-light pmd-sm">chat</i>
+            <i id="webChatCloseIcon" class="material-icons md-light pmd-sm" style="display: none">close</i>
+        </a>-->
     <div class="footer">
 
         <div>
@@ -155,8 +145,8 @@
                 <a href="/actionnaire/auth/mentionsLegales.action" target="_blank">Legal statement</a>
             </div>
             <span class="footertext">
-		 
-	</span>
+
+            </span>
             <div class="footerright">
                 <a href="/actionnaire/auth/politiqueSecurite.action" target="_blank">Site Security</a>
             </div>

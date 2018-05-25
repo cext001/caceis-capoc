@@ -911,21 +911,7 @@
         </div>
       </div>
     </div>
-    <div class="menu pmd-floating-action" role="navigation">
-      <!-- <a class="btn pmd-btn-fab pmd-btn-raised pmd-ripple-effect  btn-primary" id="webChat" data-trigger="click" data-toggle="popover"
-        data-placement="top" data-content="<iframe  src='http://localhost:3000/chat.html?popup=1' height='510' width='300' style='border:none'></iframe>"
-        data-html="true" href="javascript:void(0);">
-        <span class="pmd-floating-hidden">Primary</span>
-        <i id="webChatPrimaryIcon" class="material-icons md-light pmd-sm">chat</i>
-        <i id="webChatCloseIcon" class="material-icons md-light pmd-sm" style="display: none">close</i>
-      </a>-->
-      <a class="btn pmd-btn-fab pmd-btn-raised pmd-ripple-effect  btn-primary" id="webChat" data-trigger="click" data-toggle="popover"
-        data-placement="top" data-content="<iframe  src='https://caceis-capoc.herokuapp.com/chat.html?popup=1' height='510' width='400' style='border:none'></iframe>"
-        data-html="true" href="javascript:void(0);">
-            <span class="pmd-floating-hidden">Primary</span>
-            <i id="webChatPrimaryIcon" class="material-icons md-light pmd-sm">chat</i>
-            <i id="webChatCloseIcon" class="material-icons md-light pmd-sm" style="display: none">close</i>
-      </a>
+    <div class="menu pmd-floating-action" role="navigation">      
     </div>
   </div>
   <div id="bottom_bar">
@@ -1135,30 +1121,6 @@
     window.cookieconsent_options = { message: 'This website uses cookies to ensure you get the best experience on our website. If you continue to use it, we will consider that you accept the use of cookies. For more information about our cookie policy, please refer to our General Terms & Conditions.', learnMore: 'More info', dismiss: 'OK', container: 'body', path: '/', expiryDays: 365, theme: 'dark-bottom', };
 
          /*]]>*/
-  </script>
-  <script data-main="js/require-setup" src="require.js"></script>
-  <script>
-    function bindPopoverEvents() {
-      $('#webChat').on('hide.bs.popover', function () {
-        $("#webChatPrimaryIcon").show();
-        $("#webChatCloseIcon").hide();
-
-      })
-      $('#webChat').on('show.bs.popover', function () {
-        $("#webChatPrimaryIcon").hide();
-        $("#webChatCloseIcon").show();
-      })
-    }
-    // Loading Libary
-    require(['lib/jquery.min'], function ($) {
-
-      require(['lib/bootstrap.min'], function () {
-        require(['lib/propeller'], function () {
-          console.log("Loaded :)");
-          bindPopoverEvents()
-        });
-      });
-    });
   </script>
 </body>
 
