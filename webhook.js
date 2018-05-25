@@ -324,7 +324,7 @@ app.post('/api/webhook', function(req, res) {
 
                 return helper.getTradeStatusBySecurityIdAndCustomerId(isin,customerId).then((result) => {
                     console.log("tradeinfo",result[0]);
-                    var message = (result[0].Status == 'Settled') ? "I see. I would like to inform that 2000 quanity of "+securityName+" shares are "+result[0].Status+"." : "I see. I would like to inform that 2000 quanity of "+securityName+" shares are not yet "+result[0].Status+".";
+                    var message = (result[0].Status == 'Settled') ? "I see. I would like to inform that 2000 quanity of "+securityName+" shares are not yet "+result[0].Status+"." : "I see. I would like to inform that 2000 quanity of "+securityName+" shares are "+result[0].Status+".";
                     res.json({
                             messages: [
                                 {
@@ -344,7 +344,7 @@ app.post('/api/webhook', function(req, res) {
                 var Settlement_Date = req.body.result.contexts[4].parameters.Settlement_Date;
                 var Payment_Date = req.body.result.contexts[4].parameters.Payment_Date;
                 console.log("Payment_Date: "+Payment_Date+" ,Settlement_Date: "+Settlement_Date+" ,Event_Date:"+Event_Date);
-                
+
                 res.json({
                     messages: [
                         {
