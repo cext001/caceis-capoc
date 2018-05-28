@@ -4,10 +4,12 @@
   "version": "0.1.0",
   "main": "webhook.js",
   "scripts": {
-    "start": "node webhook.js"
+    "start": "node webhook.js",
+    "start-dev": "nodemon webhook.js"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
+    "dotenv": "^5.0.1",
     "express": "^4.16.3",
     "forever": "^0.15.3",
     "lodash": "^4.17.10",

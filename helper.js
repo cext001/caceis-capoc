@@ -1,10 +1,12 @@
+require('dotenv').config();
 var mysql = require('mysql');
 
+
 var con = mysql.createConnection({
-    host: "52.71.120.86",
-    user: "root",
-    password: "root",
-    database: "caceis"
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME
 });
 
 module.exports = {
@@ -31,7 +33,7 @@ module.exports = {
     },
     "getSecurityDetailsByName": function (securityName) {
         return new Promise(function (resolve, reject) {
-            con.query("SELECT * FROM security WHERE Security_Name LIKE ?", [securityName+"%"], function (err, result, fields) {
+            con.query("SELECT * FROM security WHERE Security_Name LIKE ?", [securityName + "%"], function (err, result, fields) {
                 if (err) {
                     reject(err)
                 };
@@ -49,9 +51,9 @@ module.exports = {
             });
         });
     },
-    "getTradeStatusBySecurityIdAndCustomerId": function (securityId,customerId) {
+    "getTradeStatusBySecurityIdAndCustomerId": function (securityId, customerId) {
         return new Promise(function (resolve, reject) {
-            con.query("SELECT * FROM tradetable WHERE Security_ID=? AND customer_ID= ? ", [securityId,customerId], function (err, result, fields) {
+            con.query("SELECT * FROM tradetable WHERE Security_ID=? AND customer_ID= ? ", [securityId, customerId], function (err, result, fields) {
                 if (err) {
                     reject(err)
                 };
@@ -69,9 +71,9 @@ module.exports = {
             });
         });
     },
-    "getHoldingAndCorporateActionData": function (customerId,securityId) {
+    "getHoldingAndCorporateActionData": function (customerId, securityId) {
         return new Promise(function (resolve, reject) {
-            con.query("CALL getHoldingAndCorporateActionData(?, ?)", [customerId,securityId], function (err, result, fields) {
+            con.query("CALL getHoldingAndCorporateActionData(?, ?)", [customerId, securityId], function (err, result, fields) {
                 if (err) {
                     reject(err)
                 };
