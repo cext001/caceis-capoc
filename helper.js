@@ -8,7 +8,7 @@ var con = mysql.createConnection({
     database: process.env.DB_NAME
 });
 
-console.log("HOST: "+process.env.DB_HOST+", USER: "+process.env.DB_USER+", PASS: "+process.env.DB_PASS+", DBNAME: "+process.env.DB_NAME);
+console.log("HOST: " + process.env.DB_HOST + ", USER: " + process.env.DB_USER + ", PASS: " + process.env.DB_PASS + ", DBNAME: " + process.env.DB_NAME);
 
 module.exports = {
     "getCustomerDetails": function (customerId) {
@@ -81,5 +81,22 @@ module.exports = {
                 resolve(result)
             });
         });
+    },
+    "getFormattedDate": function () {
+        var today = new Date();
+        var date = "";
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1;
+
+        var yyyy = today.getFullYear();
+        if (dd < 10) {
+            dd = '0' + dd;
+        }
+        if (mm < 10) {
+            mm = '0' + mm;
+        }
+        date = yyyy + '-' + dd + '-' + mm;
+
+        return date;
     }
 };

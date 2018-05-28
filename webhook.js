@@ -356,17 +356,17 @@ app.post('/api/webhook', function(req, res) {
                                 {
                                     "type": 0,
                                     "platform": "facebook",
-                                    "speech": "I see. I would like to inform that 2000 quanity of "+securityName+" shares are "+result[0].Status+"."
+                                    "speech": "I see. I would like to inform that "+result[0].quantity+" quanity of "+securityName+" shares are "+result[0].Status+"."
                                 }
                             ]
-                        }).end();                        
+                        }).end();                                                
                     } else {
                         res.json({
                             messages: [
                                 {
                                     "type": 0,
                                     "platform": "facebook",
-                                    "speech": "Trade info not found the the system."
+                                    "speech": "Trade info not found in the system."
                                 }
                             ]
                         }).end();
@@ -402,9 +402,10 @@ app.post('/chatbot/savehistory', function(req, res) {
 
     var contexts = req.body.contexts;
     var sessionId = botconversation.sessionId;
+    var dateFormatted = helper.getFormattedDate();
 
     botconversation = JSON.stringify(botconversation);
-    var record = [sessionId, "Chat", req.body.customerId, req.body.customerName, "2017-09-15", "Dividend Payout", "", "", botconversation];
+    var record = [sessionId, "Chat", req.body.customerId, req.body.customerName, dateFormatted, "Dividend Payout", "", "", botconversation];
     console.log("record", record);
 
     return helper.saveChatHistory(record).then((result) => {
@@ -419,7 +420,7 @@ app.get('/test', function(req, res) {
     return helper.getHoldingAndCorporateActionData("99999999", "US0378331005").then((result) => {
         console.log('rs1',result[0][0]);
         console.log('rs2',result[1][0]);
-        res.send("succ")
+        res.send("succ"+helper.getFormattedDate())
     }).catch((err) => {
         console.log("err", err);
         res.send("Something went wrong");
