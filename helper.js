@@ -95,7 +95,7 @@ module.exports = {
         if (mm < 10) {
             mm = '0' + mm;
         }
-        date = yyyy + '-' + dd + '-' + mm;
+        date = yyyy + '-' + mm + '-' + dd;
 
         return date;
     }
