@@ -1,13 +1,14 @@
 require('dotenv').config();
 var mysql = require('mysql');
 
-
 var con = mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASS,
     database: process.env.DB_NAME
 });
+
+console.log("HOST: "+process.env.DB_HOST+", USER: "+process.env.DB_USER+", PASS: "+process.env.DB_PASS+", DBNAME: "+process.env.DB_NAME);
 
 module.exports = {
     "getCustomerDetails": function (customerId) {
