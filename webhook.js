@@ -41,7 +41,9 @@ app.post('/api/webhook', function(req, res) {
                     }]
                 }).end();
                 break;
+            /**--------First scenario-Transfer agent START----------**/    
             case "caceis.nameIntent":
+                var clientName;
                 res.json({
                     messages: [{
                             "type": 0,
@@ -66,7 +68,7 @@ app.post('/api/webhook', function(req, res) {
                     ]
                 }).end();
                 break;
-            case "caceisnameIntent.caceisnameIntent-yes":
+            case "caceis.nameIntent-yes":
                 res.json({
                     messages: [{
                         "type": 0,
@@ -75,33 +77,34 @@ app.post('/api/webhook', function(req, res) {
                     }]
                 }).end();
                 break;
-            case "caceis.accountNumberIntent":
+            case "caceis.nameIntent-yes-getAccountNumber":
                 var accountNumber = req.body.result.parameters.number;
                 return helper.getCustomerDetails(accountNumber).then((result) => {
-                    console.log('result count', result[0].count);
+                    console.log('customer count', result.count);
                     if(result[0].count > 0) {
-                      res.json({
-                          messages: [{
-                              "type": 0,
-                              "platform": "facebook",
-                              "speech": "Thanks for sharing the information. Could you please share your query ?"
-                          }]
-                      }).end();
+                        res.json({
+                            messages: [{
+                                "type": 0,
+                                "platform": "facebook",
+                                "speech": "Thanks for sharing the information. Could you please share your query ?"
+                            }]
+                        }).end();
                     } else {
-                      res.json({
-                        messages: [{
-                            "type": 0,
-                            "platform": "facebook",
-                            "speech": "Cant find account information. Please try again."
-                        }]
-                    }).end();
+                        res.json({
+                            messages: [{
+                                "type": 0,
+                                "platform": "facebook",
+                                "speech": "Cant find account information. Please try again."
+                            }]
+                        }).end();
                     }
                 }).catch((err) => {
                     console.log("err", err);
                     res.send("Something went wrong");
                 });                
                 break;
-            case "caceis.raiseQuery":
+            case "caceis.rightsIssueQuery":
+                var securityName;
                 res.json({
                     messages: [{
                         "type": 0,
@@ -110,7 +113,7 @@ app.post('/api/webhook', function(req, res) {
                     }]
                 }).end();
                 break;
-            case "caceisraiseQuery.caceisraiseQuery-custom":
+            case "caceis.rightsIssueQuery-confirm":
                 res.json({
                     messages: [{
                             "type": 0,
@@ -140,7 +143,7 @@ app.post('/api/webhook', function(req, res) {
                     ]
                 }).end();
                 break;
-            case "caceisraiseQuery.caceisraiseQuery-custom.caceisraiseQuery-custom-yes":
+            case "caceis.rightsIssueQuery-confirm-yes":
                 res.json({
                     messages: [{
                             "type": 0,
@@ -155,7 +158,7 @@ app.post('/api/webhook', function(req, res) {
                     ]
                 }).end();
                 break;
-            case "caceisraiseQuery.caceisraiseQuery-custom.caceisraiseQuery-custom-no":
+            case "caceis.rightsIssueQuery-confirm-no":
                 res.json({
                     messages: [{
                             "type": 0,
@@ -170,7 +173,7 @@ app.post('/api/webhook', function(req, res) {
                     ]
                 }).end();
                 break;
-            case "caceisraiseQuery.caceisraiseQuery-custom.caceisraiseQuery-custom-no.caceisraiseQuery-custom-no-yes":
+            case "caceis.rightsIssueQuery-confirm-yes-yes":
                 res.json({
                     messages: [{
                         "type": 0,
@@ -179,7 +182,7 @@ app.post('/api/webhook', function(req, res) {
                     }]
                 }).end();
                 break;
-            case "caceisraiseQuery.caceisraiseQuery-custom.caceisraiseQuery-custom-yes.caceisraiseQuery-custom-yes-yes":
+            case "caceis.rightsIssueQuery-confirm-no-yes":
                 res.json({
                     messages: [{
                         "type": 0,
@@ -188,14 +191,7 @@ app.post('/api/webhook', function(req, res) {
                     }]
                 }).end();
                 break;
-            case "caceis.thankAndBye":
-                res.json({
-                    messages: [{
-                        "type": 0,
-                        "speech": "Happy to help you. Have a nice day."
-                    }]
-                }).end();
-                break;
+            /**--------First scenario-Transfer agent END----------**/    
             /**--------Second scenario-Transfer agent START----------**/    
             case "caceis.nameCompanyIntent":
                 res.json({
@@ -208,7 +204,7 @@ app.post('/api/webhook', function(req, res) {
                     ]
                 }).end();
                 break;
-            case "caceis.corporateActionQuery":
+            case "caceis.transferAgentQuery":
                 res.json({
                     messages: [
                         {
@@ -219,7 +215,7 @@ app.post('/api/webhook', function(req, res) {
                     ]
                 }).end();
                 break;
-            case "caceiscorporateActionQuery.caceiscorporateActionQuery-getEntityId":
+            case "caceis.transferAgentQuery-getEntityId":
                 var entityId = req.body.result.parameters.entityId;
                 var companyName = req.body.result.contexts[0].parameters.companyName;
                 console.log("entityId :"+entityId+" ,companyName: "+companyName);            
@@ -259,7 +255,7 @@ app.post('/api/webhook', function(req, res) {
                     res.send("Something went wrong");
                 });
                 break;
-            case "caceiscorporateActionQuery.caceiscorporateActionQuery-custom.caceiscorporateActionQuery-custom-getEntityId-getQuery":
+            case "caceis.transferAgentQuery-getEntityId-getQuery":
                 var securityName = req.body.result.parameters.securityName;
                 return helper.getSecurityDetailsByName(securityName).then((result) => {
                     console.log("securityinfo",result);
@@ -288,7 +284,7 @@ app.post('/api/webhook', function(req, res) {
                     res.send("Something went wrong");
                 });
                 break;
-            case "caceiscorporateActionQuery.caceiscorporateActionQuery-custom.caceiscorporateActionQuery-custom-getEntityId-getQuery.caceiscorporateActionQuery-custom-getEntityId-getQuery-confirmation":
+            case "caceis.transferAgentQuery-getEntityId-getQuery-confirmation":
                 var isin = req.body.result.contexts[6].parameters.securityISIN;
                 var companyName = req.body.result.contexts[0].parameters.companyName;
                 var customerId = req.body.result.contexts[0].parameters.entityId;
@@ -341,7 +337,7 @@ app.post('/api/webhook', function(req, res) {
                 });
                
                 break;
-            case "caceis.corporateActionQueryFinialise":
+            case "caceis.transferAgentFinialise":
                 var securityName = req.body.result.contexts[6].parameters.securityName;
                 var customerId = req.body.result.contexts[0].parameters.entityId;
                 var isin = req.body.result.contexts[6].parameters.securityISIN;
@@ -376,7 +372,7 @@ app.post('/api/webhook', function(req, res) {
                     res.send("Something went wrong");
                 });                    
                 break;
-            case "caceiscorporateActionQueryFinialise-confirm":
+            case "caceis.transferAgentFinialise-confirm":
                 var Event_Date = req.body.result.contexts[7].parameters.Event_Date;
                 var Settlement_Date = req.body.result.contexts[7].parameters.Settlement_Date;
                 var Payment_Date = req.body.result.contexts[7].parameters.Payment_Date;
@@ -392,7 +388,15 @@ app.post('/api/webhook', function(req, res) {
                     ]
                 }).end();
                 break;
-            /**--------Second scenario-Transfer agent END----------**/ 
+            /**--------Second scenario-Transfer agent END----------**/            
+            case "caceis.thankAndBye":
+                res.json({
+                    messages: [{
+                        "type": 0,
+                        "speech": "Happy to help you. Have a nice day."
+                    }]
+                }).end();
+                break;    
         }
     }
 });
