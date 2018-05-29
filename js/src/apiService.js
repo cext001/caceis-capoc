@@ -74,10 +74,10 @@ define(['jquery', 'settings', 'utils', 'messageTemplates', 'cards', 'uuid'],
 
                             $.each(contexts, function (key, value) {
                                 if (value.name == "account-info") {
-                                    customerId = value.parameters.number;
+                                    customerId = value.parameters.accountNumber;
                                 }
                                 if (value.name == "customer-name") {
-                                    customerName = value.parameters.firstName;
+                                    customerName = value.parameters.clientName;
                                 }
                                 if(value.name == "name-company-info") {
                                     customerId = value.parameters.entityId;
