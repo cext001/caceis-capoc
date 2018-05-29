@@ -62,10 +62,8 @@ app.post('/api/webhook', function (req, res) {
                         {
                             "text": "No I am Fine",
                             "postback": "no"
-                        }
-                        ]
-                    }
-                    ]
+                        }]
+                    }]
                 }).end();
                 break;
             case "caceis.nameIntent-yes":
@@ -188,8 +186,7 @@ app.post('/api/webhook', function (req, res) {
                                                 lifespan: 5
                                             }
                                         ] : [];
-
-                    res.json({
+                    var response = {
                         messages: [
                             {
                                 "type": 0,
@@ -203,7 +200,29 @@ app.post('/api/webhook', function (req, res) {
                             }
                         ],
                         contextOut: contextArray
-                    }).end();
+                    };    
+
+                    if(result[1].length > 0 && result[0].length > 0) {
+                        response.messages.push({
+                            "type": 1,
+                            "platform": "facebook",
+                            "title": "Please select",
+                            "subtitle": "",
+                            "buttons": [{
+                                "text": "Yes",
+                                "postback": "yes"
+                            },
+                            {
+                                "text": "No",
+                                "postback": "no"
+                            }
+                            ]
+                        });
+                    }
+
+                    console.log("respnbse",JSON.stringify(response));
+
+                    res.json(response).end();
                 }).catch((err) => {
                     console.log("err", err);
                     res.json({
