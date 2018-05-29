@@ -100,36 +100,64 @@ app.post('/api/webhook', function (req, res) {
                     }
                 }).catch((err) => {
                     console.log("get customer details err", err);
-                    res.send("Something went wrong");
-                });
-                break;
-            case "caceis.rightsIssueQuery":
-                var securityName;
-                return helper.getSecurityDetailsByName(securityName).then((result) => {
-                    console.log("securityinfo", result);
-                    console.log("securityinfo row count", result.length);
                     res.json({
                         messages: [
                             {
                                 "type": 0,
                                 "platform": "facebook",
-                                "speech": "You are talking about , ISIN number " + result[0].ISIN + " and  Stock name - " + result[0].Security_Name + " ?"
-                            }
-                        ],
-                        contextOut: [
-                            {
-                                name: "security-info",
-                                parameters: {
-                                    securityISIN: result[0].ISIN,
-                                    securityName: result[0].Security_Name
-                                },
-                                lifespan: 5
+                                "speech": "Something went wrong"
                             }
                         ]
                     }).end();
+                });
+                break;
+            case "caceis.rightsIssueQuery":
+                var securityName = req.body.result.parameters.securityName;
+                return helper.getSecurityDetailsByName(securityName).then((result) => {
+                    console.log("securityinfo", result);
+                    console.log("securityinfo row count", result.length);
+                    if(result.length > 0) {
+                        res.json({
+                            messages: [
+                                {
+                                    "type": 0,
+                                    "platform": "facebook",
+                                    "speech": "You are talking about , ISIN number " + result[0].ISIN + " and  Stock name - " + result[0].Security_Name + " ?"
+                                }
+                            ],
+                            contextOut: [
+                                {
+                                    name: "security-info",
+                                    parameters: {
+                                        securityISIN: result[0].ISIN,
+                                        securityName: result[0].Security_Name
+                                    },
+                                    lifespan: 5
+                                }
+                            ]
+                        }).end();
+                    } else {
+                        res.json({
+                            messages: [
+                                {
+                                    "type": 0,
+                                    "platform": "facebook",
+                                    "speech": "Unable to find security information."
+                                }
+                            ]
+                        }).end();
+                    }
                 }).catch((err) => {
-                    console.log("err", err);
-                    res.send("Something went wrong");
+                    console.log("fetch security details err", err);
+                    res.json({
+                        messages: [
+                            {
+                                "type": 0,
+                                "platform": "facebook",
+                                "speech": "Something went wrong"
+                            }
+                        ]
+                    }).end();
                 });
                 break;
             case "caceis.rightsIssueQuery-confirm":
@@ -156,10 +184,8 @@ app.post('/api/webhook', function (req, res) {
                         {
                             "text": "No",
                             "postback": "no"
-                        }
-                        ]
-                    }
-                    ]
+                        }]
+                    }]
                 }).end();
                 break;
             case "caceis.rightsIssueQuery-confirm-yes":
