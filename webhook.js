@@ -267,13 +267,20 @@ app.post('/api/webhook', function (req, res) {
                 }).end();
                 break;
             case "caceis.rightsIssueQuery-confirm-yes-yes":
-                res.json({
-                    messages: [{
-                        "type": 0,
-                        "platform": "facebook",
-                        "speech": "Last date for response - 21-05-2018\nPayment date - 25-05-2018\nSettlement date - 28-05-2018"
-                    }]
-                }).end();
+                    var Event_Date = req.body.result.contexts[5].parameters.Event_Date;
+                    var Settlement_Date = req.body.result.contexts[5].parameters.Settlement_Date;
+                    var Payment_Date = req.body.result.contexts[5].parameters.Payment_Date;
+                    console.log("Payment_Date: " + Payment_Date + " ,Settlement_Date: " + Settlement_Date + " ,Event_Date:" + Event_Date);
+
+                    res.json({
+                        messages: [
+                            {
+                                "type": 0,
+                                "platform": "facebook",
+                                "speech": "Important date for the corporate actions for your reference.\n\nLast date for response - " + Event_Date + "\n\nPayment date - " + Payment_Date + "\n\nSettlement date - " + Settlement_Date + ""
+                            }
+                        ]
+                    }).end();
                 break;
             case "caceis.rightsIssueQuery-confirm-no-yes":
                 res.json({
