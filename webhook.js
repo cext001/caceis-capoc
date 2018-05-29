@@ -116,7 +116,7 @@ app.post('/api/webhook', function (req, res) {
                 return helper.getSecurityDetailsByName(securityName).then((result) => {
                     console.log("securityinfo", result);
                     console.log("securityinfo row count", result.length);
-                    if(result.length > 0) {
+                    if (result.length > 0) {
                         res.json({
                             messages: [
                                 {
@@ -161,32 +161,61 @@ app.post('/api/webhook', function (req, res) {
                 });
                 break;
             case "caceis.rightsIssueQuery-confirm":
-                res.json({
-                    messages: [{
-                        "type": 0,
-                        "platform": "facebook",
-                        "speech": "You have 1500 quantiy of Apple shares as of now. Voluntary corporate action for rights issue is initiated by Apple."
-                    },
-                    {
-                        "type": 0,
-                        "platform": "facebook",
-                        "speech": "Rights issue is offered at 2:1 @ Rs 25. Would you be interested to opt for rights issue?."
-                    },
-                    {
-                        "type": 1,
-                        "platform": "facebook",
-                        "title": "Please select",
-                        "subtitle": "",
-                        "buttons": [{
-                            "text": "Yes",
-                            "postback": "yes"
-                        },
-                        {
-                            "text": "No",
-                            "postback": "no"
-                        }]
-                    }]
-                }).end();
+                var isin = req.body.result.contexts[2].parameters.securityISIN;
+                var securityName = req.body.result.contexts[0].parameters.securityName;
+                var accountNumber = req.body.result.contexts[0].parameters.accountNumber;
+                console.log("isin: " + isin + " ,securityName: " + securityName + " ,accountNumber: " + accountNumber);
+
+                return helper.getHoldingAndCorporateActionData(accountNumber, isin).then((result) => {
+                    console.log('Holdings data', result[0][0]);
+                    console.log('Holdings data row count', result[0].length);
+                    console.log('corporate action data', result[1][0]);
+                    console.log('corporate action data', result[1].length);
+
+                    var holdingsInfo = (result[0].length > 0) ? "You have " + result[0][0].quantity + " quantiy of " + securityName + " shares as of now. Voluntary corporate action for rights issue is initiated by  " + securityName + " ."
+                                        : "Unable to find holdings for this ISIN from " + securityName;
+                    var corporateActionInfo = (result[1].length > 0) ? result[1][0].Event_Name + " issue is offered at " + result[1][0].Pershare_Offer + ":1 @ Rs " + result[1][0].Pershare_Offer + ". Would you be interested to opt for rights issue?."
+                                                : "Unable to find records for the corporate action events for the ISIN";
+                    var contextArray = (result[1].length > 0) ? 
+                                        [
+                                            {
+                                                name: "corporateactionvent-info",
+                                                parameters: {
+                                                    Event_Date: result[1][0].Event_Date,
+                                                    Payment_Date: result[1][0].Payment_Date,
+                                                    Settlement_Date: result[1][0].Settlement_Date
+                                                },
+                                                lifespan: 5
+                                            }
+                                        ] : [];
+
+                    res.json({
+                        messages: [
+                            {
+                                "type": 0,
+                                "platform": "facebook",
+                                "speech": holdingsInfo
+                            },
+                            {
+                                "type": 0,
+                                "platform": "facebook",
+                                "speech": corporateActionInfo
+                            }
+                        ],
+                        contextOut: contextArray
+                    }).end();
+                }).catch((err) => {
+                    console.log("err", err);
+                    res.json({
+                        messages: [
+                            {
+                                "type": 0,
+                                "platform": "facebook",
+                                "speech": "Something went wrong"
+                            }
+                        ]
+                    }).end();
+                });
                 break;
             case "caceis.rightsIssueQuery-confirm-yes":
                 res.json({
@@ -313,7 +342,7 @@ app.post('/api/webhook', function (req, res) {
                 return helper.getSecurityDetailsByName(securityName).then((result) => {
                     console.log("securityinfo", result);
                     console.log("securityinfo row count", result.length);
-                    if(result.length > 0) {
+                    if (result.length > 0) {
                         res.json({
                             messages: [
                                 {
@@ -343,7 +372,7 @@ app.post('/api/webhook', function (req, res) {
                                 }
                             ]
                         }).end();
-                    }                    
+                    }
                 }).catch((err) => {
                     console.log("get security details err", err);
                     res.json({
