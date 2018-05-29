@@ -54,7 +54,7 @@ module.exports = {
     },
     "getTradeStatusBySecurityIdAndCustomerId": function (securityId, customerId) {
         return new Promise(function (resolve, reject) {
-            con.query("SELECT * FROM tradetable WHERE Security_ID=? AND customer_ID= ? ", [securityId, customerId], function (err, result, fields) {
+            con.query("SELECT * FROM tradetable WHERE ISIN=? AND customer_ID= ? ", [securityId, customerId], function (err, result, fields) {
                 if (err) {
                     reject(err)
                 };

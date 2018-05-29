@@ -215,8 +215,7 @@ app.post('/api/webhook', function (req, res) {
                             {
                                 "text": "No",
                                 "postback": "no"
-                            }
-                            ]
+                            }]
                         });
                     }
 
