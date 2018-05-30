@@ -542,7 +542,7 @@ app.post('/api/webhook', function (req, res) {
                 }).end();
                 break;
             case "caceis.payRecRaiseIssue-getCustId":
-                var custId = req.body.result.parameters.custId;
+                var custId = req.body.result.parameters.entityId;
                 return helper.getCustomerDetails(custId).then((result) => {
                     console.log('customer count', result.length);
                     if (result.length > 0) {
@@ -576,7 +576,8 @@ app.post('/api/webhook', function (req, res) {
                 });
                 break;
             case "caceis.payRecRaiseIssue-getCustId-getQuery":
-                var custId = req.body.result.contexts[1].parameters.custId;
+                var nameCompanyInfo = _.find(req.body.result.contexts, ['name', "name-company-info"]);                
+                var custId = nameCompanyInfo.parameters.entityId;                
                 console.log("custId", custId);
                 return helper.getPayableRecievableInfoByCustId(custId).then((result) => {
                     console.log('payable recievable rs length', result.length);
@@ -672,7 +673,7 @@ app.post('/api/webhook', function (req, res) {
                 break;
             case "caceis.payRecRaiseIssue-getCustId-getQuery-confirm":
                 var payableRecievableInfo = _.find(req.body.result.contexts, ['name', "selected-securiry-info"]);
-                console.log('payableRecievableInfo', payableRecievableInfo);
+                console.log('payableRecievableInfo', JSON.stringify(payableRecievableInfo));
                 res.json({
                     messages: [
                         {
@@ -686,8 +687,8 @@ app.post('/api/webhook', function (req, res) {
             case "caceis.payRecRaiseIssue-getCustId-getQuery-getISINNum":
                 var isinNum = req.body.result.parameters.isinNum;
                 var securityOptions = _.find(req.body.result.contexts, ['name', 'securiry-options']);
-                console.log('securityOptions', securityOptions);
-                var payableRecievableInfo = _.find(securityOptions, ['securityISIN', isinNum]);
+                console.log('securityOptions', JSON.stringify(securityOptions));
+                var payableRecievableInfo = _.find(securityOptions.parameters.securityInfo, ['securityISIN', isinNum]);
                 console.log("payableRecievableInfo",payableRecievableInfo);
                 res.json({
                     messages: [
