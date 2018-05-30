@@ -713,6 +713,15 @@ app.post('/api/webhook', function (req, res) {
                             "platform": "facebook",
                             "speech": "Ex date for the corporate action was " + payableRecievableInfo.parameters.EX_Date + " however you sold the securities on " + payableRecievableInfo.parameters.Trade_Date + "."
                         }
+                    ],
+                    contextOut: [
+                        {
+                            name: "subject-info",
+                            parameters: {
+                                Subject: "Payables and Receivables"
+                            },
+                            lifespan: 3
+                        }
                     ]
                 }).end();
                 break;
