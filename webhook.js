@@ -595,7 +595,10 @@ app.post('/api/webhook', function (req, res) {
                                         name: "selected-securiry-info",
                                         parameters: {
                                             securityISIN: result[0].isin,
-                                            securityName: result[0].Security_Name
+                                            securityName: result[0].Security_Name,
+                                            Trade_Date: result[0].Trade_Date,
+                                            EX_Date: result[0].EX_Date,
+                                            customer_ID: result[0].customer_ID
                                         },
                                         lifespan: 5
                                     }
@@ -612,9 +615,18 @@ app.post('/api/webhook', function (req, res) {
                                     {
                                         "type": 1,
                                         "platform": "facebook",
-                                        "title": "Please select",
+                                        "title": "Please select the appropriate from the below",
                                         "subtitle": "",
                                         "buttons": []
+                                    }
+                                ],
+                                contextOut: [
+                                    {
+                                        name: "securiry-options",
+                                        parameters: {
+                                            securityInfo: []
+                                        },
+                                        lifespan: 5
                                     }
                                 ]
                             };
@@ -623,8 +635,15 @@ app.post('/api/webhook', function (req, res) {
                                     "text": value.isin + " - " + value.Security_Name,
                                     "postback": value.isin
                                 });
+                                response.contextOut[0].parameters.securityInfo.push({
+                                    securityISIN: value.isin,
+                                    securityName: value.Security_Name,
+                                    Trade_Date: value.Trade_Date,
+                                    EX_Date: value.EX_Date,
+                                    customer_ID: value.customer_ID
+                                });
                             });
-                            console.log("response",response);
+                            console.log("response", response);
                             res.json(response).end();
                         }
                     } else {
@@ -650,6 +669,35 @@ app.post('/api/webhook', function (req, res) {
                         ]
                     }).end();
                 });
+                break;
+            case "caceis.payRecRaiseIssue-getCustId-getQuery-confirm":
+                var payableRecievableInfo = _.find(req.body.result.contexts, ['name', "selected-securiry-info"]);
+                console.log('payableRecievableInfo', payableRecievableInfo);
+                res.json({
+                    messages: [
+                        {
+                            "type": 0,
+                            "platform": "facebook",
+                            "speech": "Ex date for the corporate action was " + payableRecievableInfo.EX_Date + " however you sold the securities on " + payableRecievableInfo.Trade_Date + "."
+                        }
+                    ]
+                }).end();
+                break;
+            case "caceis.payRecRaiseIssue-getCustId-getQuery-getISINNum":
+                var isinNum = req.body.result.parameters.isinNum;
+                var securityOptions = _.find(req.body.result.contexts, ['name', 'securiry-options']);
+                console.log('securityOptions', securityOptions);
+                var payableRecievableInfo = _.find(securityOptions, ['securityISIN', isinNum]);
+                console.log("payableRecievableInfo",payableRecievableInfo);
+                res.json({
+                    messages: [
+                        {
+                            "type": 0,
+                            "platform": "facebook",
+                            "speech": "Ex date for the corporate action was " + payableRecievableInfo.EX_Date + " however you sold the securities on " + payableRecievableInfo.Trade_Date + "."
+                        }
+                    ]
+                }).end();
                 break;
             /**--------Third scenario-Payables and Receivables END----------**/
             case "caceis.thankAndBye":
@@ -684,11 +732,10 @@ app.post('/chatbot/savehistory', function (req, res) {
 });
 
 app.get('/test', function (req, res) {
-    return helper.getPayableRecievableInfoByCustId("88888888").then((result) => {
+    return helper.getPayableRecievableInfoByCustId("22222222").then((result) => {
         console.log('rs1', result.length);
-        _.forEach(result, function (value, key) {
-            console.log(value);
-        });
+        var test = _.find(result, ['Security_Name', "Infosys"]);
+        console.log("rese", test);
         res.send("succ")
     }).catch((err) => {
         console.log("err", err);
