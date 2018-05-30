@@ -41,6 +41,17 @@ app.post('/api/webhook', function (req, res) {
                     }]
                 }).end();
                 break;
+            case "caceis.nameCompanyIntent":
+                res.json({
+                    messages: [
+                        {
+                            "type": 0,
+                            "platform": "facebook",
+                            "speech": "Can you tell me in a few words how I can help you ?."
+                        }
+                    ]
+                }).end();
+                break;
             /**--------First scenario-Transfer agent START----------**/
             case "caceis.nameIntent":
                 var clientName;
@@ -171,21 +182,21 @@ app.post('/api/webhook', function (req, res) {
                     console.log('corporate action data', result[1].length);
 
                     var holdingsInfo = (result[0].length > 0) ? "You have " + result[0][0].quantity + " quantiy of " + securityName + " shares as of now. Voluntary corporate action for rights issue is initiated by  " + securityName + " ."
-                                        : "Unable to find holdings for this ISIN from " + securityName;
+                        : "Unable to find holdings for this ISIN from " + securityName;
                     var corporateActionInfo = (result[1].length > 0) ? result[1][0].Event_Name + " issue is offered at " + result[1][0].Pershare_Offer + ":1 @ Rs " + result[1][0].Pershare_Offer + ". Would you be interested to opt for rights issue?."
-                                                : "Unable to find records for the corporate action events for the ISIN";
-                    var contextArray = (result[1].length > 0) ? 
-                                        [
-                                            {
-                                                name: "corporateactionvent-info",
-                                                parameters: {
-                                                    Event_Date: result[1][0].Event_Date,
-                                                    Payment_Date: result[1][0].Payment_Date,
-                                                    Settlement_Date: result[1][0].Settlement_Date
-                                                },
-                                                lifespan: 5
-                                            }
-                                        ] : [];
+                        : "Unable to find records for the corporate action events for the ISIN";
+                    var contextArray = (result[1].length > 0) ?
+                        [
+                            {
+                                name: "corporateactionvent-info",
+                                parameters: {
+                                    Event_Date: result[1][0].Event_Date,
+                                    Payment_Date: result[1][0].Payment_Date,
+                                    Settlement_Date: result[1][0].Settlement_Date
+                                },
+                                lifespan: 5
+                            }
+                        ] : [];
                     var response = {
                         messages: [
                             {
@@ -200,9 +211,9 @@ app.post('/api/webhook', function (req, res) {
                             }
                         ],
                         contextOut: contextArray
-                    };    
+                    };
 
-                    if(result[1].length > 0 && result[0].length > 0) {
+                    if (result[1].length > 0 && result[0].length > 0) {
                         response.messages.push({
                             "type": 1,
                             "platform": "facebook",
@@ -219,7 +230,7 @@ app.post('/api/webhook', function (req, res) {
                         });
                     }
 
-                    console.log("respnbse",JSON.stringify(response));
+                    console.log("respnbse", JSON.stringify(response));
 
                     res.json(response).end();
                 }).catch((err) => {
@@ -261,25 +272,24 @@ app.post('/api/webhook', function (req, res) {
                         "type": 0,
                         "platform": "facebook",
                         "speech": "Thanks for sharing the information. Would you like to know the important dates for the rights issue."
-                    }
-                    ]
+                    }]
                 }).end();
                 break;
             case "caceis.rightsIssueQuery-confirm-yes-yes":
-                    var Event_Date = req.body.result.contexts[5].parameters.Event_Date;
-                    var Settlement_Date = req.body.result.contexts[5].parameters.Settlement_Date;
-                    var Payment_Date = req.body.result.contexts[5].parameters.Payment_Date;
-                    console.log("Payment_Date: " + Payment_Date + " ,Settlement_Date: " + Settlement_Date + " ,Event_Date:" + Event_Date);
+                var Event_Date = req.body.result.contexts[5].parameters.Event_Date;
+                var Settlement_Date = req.body.result.contexts[5].parameters.Settlement_Date;
+                var Payment_Date = req.body.result.contexts[5].parameters.Payment_Date;
+                console.log("Payment_Date: " + Payment_Date + " ,Settlement_Date: " + Settlement_Date + " ,Event_Date:" + Event_Date);
 
-                    res.json({
-                        messages: [
-                            {
-                                "type": 0,
-                                "platform": "facebook",
-                                "speech": "Important date for the corporate actions for your reference.\n\nLast date for response - " + Event_Date + "\n\nPayment date - " + Payment_Date + "\n\nSettlement date - " + Settlement_Date + ""
-                            }
-                        ]
-                    }).end();
+                res.json({
+                    messages: [
+                        {
+                            "type": 0,
+                            "platform": "facebook",
+                            "speech": "Important date for the corporate actions for your reference.\n\nLast date for response - " + Event_Date + "\n\nPayment date - " + Payment_Date + "\n\nSettlement date - " + Settlement_Date + ""
+                        }
+                    ]
+                }).end();
                 break;
             case "caceis.rightsIssueQuery-confirm-no-yes":
                 res.json({
@@ -292,17 +302,6 @@ app.post('/api/webhook', function (req, res) {
                 break;
             /**--------First scenario-Transfer agent END----------**/
             /**--------Second scenario-Transfer agent START----------**/
-            case "caceis.nameCompanyIntent":
-                res.json({
-                    messages: [
-                        {
-                            "type": 0,
-                            "platform": "facebook",
-                            "speech": "Can you tell me in a few words how I can help you ?."
-                        }
-                    ]
-                }).end();
-                break;
             case "caceis.transferAgentQuery":
                 res.json({
                     messages: [
@@ -532,6 +531,127 @@ app.post('/api/webhook', function (req, res) {
                 }).end();
                 break;
             /**--------Second scenario-Transfer agent END----------**/
+            /**--------Third scenario-Payables and Receivables START----------**/
+            case "caceis.payRecRaiseIssue":
+                res.json({
+                    messages: [{
+                        "type": 0,
+                        "platform": "facebook",
+                        "speech": "Please share the customer id."
+                    }]
+                }).end();
+                break;
+            case "caceis.payRecRaiseIssue-getCustId":
+                var custId = req.body.result.parameters.custId;
+                return helper.getCustomerDetails(custId).then((result) => {
+                    console.log('customer count', result.length);
+                    if (result.length > 0) {
+                        res.json({
+                            messages: [{
+                                "type": 0,
+                                "platform": "facebook",
+                                "speech": "Thanks for sharing the information. Could you please share your query ?"
+                            }]
+                        }).end();
+                    } else {
+                        res.json({
+                            messages: [{
+                                "type": 0,
+                                "platform": "facebook",
+                                "speech": "Cant find account information. Please try again."
+                            }]
+                        }).end();
+                    }
+                }).catch((err) => {
+                    console.log("get customer details err", err);
+                    res.json({
+                        messages: [
+                            {
+                                "type": 0,
+                                "platform": "facebook",
+                                "speech": "Something went wrong"
+                            }
+                        ]
+                    }).end();
+                });
+                break;
+            case "caceis.payRecRaiseIssue-getCustId-getQuery":
+                var custId = req.body.result.contexts[1].parameters.custId;
+                console.log("custId", custId);
+                return helper.getPayableRecievableInfoByCustId(custId).then((result) => {
+                    console.log('payable recievable rs length', result.length);
+                    if (result.length > 0) {
+                        if (result.length == 1) {
+                            res.json({
+                                messages: [
+                                    {
+                                        "type": 0,
+                                        "platform": "facebook",
+                                        "speech": "You are talking about , ISIN number " + result[0].isin + " and  Stock name - " + result[0].Security_Name + " ?"
+                                    }
+                                ],
+                                contextOut: [
+                                    {
+                                        name: "selected-securiry-info",
+                                        parameters: {
+                                            securityISIN: result[0].isin,
+                                            securityName: result[0].Security_Name
+                                        },
+                                        lifespan: 5
+                                    }
+                                ]
+                            }).end();
+                        } else {
+                            var response = {
+                                messages: [
+                                    {
+                                        "type": 0,
+                                        "platform": "facebook",
+                                        "speech": "I notice that there are multiple records."
+                                    },
+                                    {
+                                        "type": 1,
+                                        "platform": "facebook",
+                                        "title": "Please select",
+                                        "subtitle": "",
+                                        "buttons": []
+                                    }
+                                ]
+                            };
+                            _.forEach(result, function (value, key) {
+                                response.messages[1].buttons.push({
+                                    "text": value.isin + " - " + value.Security_Name,
+                                    "postback": value.isin
+                                });
+                            });
+                            console.log("response",response);
+                            res.json(response).end();
+                        }
+                    } else {
+                        res.json({
+                            messages: [
+                                {
+                                    "type": 0,
+                                    "platform": "facebook",
+                                    "speech": "Unable to find payable recievable records."
+                                }
+                            ]
+                        }).end();
+                    }
+                }).catch((err) => {
+                    console.log("payable recievable error", err);
+                    res.json({
+                        messages: [
+                            {
+                                "type": 0,
+                                "platform": "facebook",
+                                "speech": "Something went wrong"
+                            }
+                        ]
+                    }).end();
+                });
+                break;
+            /**--------Third scenario-Payables and Receivables END----------**/
             case "caceis.thankAndBye":
                 res.json({
                     messages: [{
@@ -564,10 +684,12 @@ app.post('/chatbot/savehistory', function (req, res) {
 });
 
 app.get('/test', function (req, res) {
-    return helper.getHoldingAndCorporateActionData("99999999", "US0378331005").then((result) => {
-        console.log('rs1', result[0][0]);
-        console.log('rs2', result[1][0]);
-        res.send("succ" + helper.getFormattedDate())
+    return helper.getPayableRecievableInfoByCustId("88888888").then((result) => {
+        console.log('rs1', result.length);
+        _.forEach(result, function (value, key) {
+            console.log(value);
+        });
+        res.send("succ")
     }).catch((err) => {
         console.log("err", err);
         res.send("Something went wrong");

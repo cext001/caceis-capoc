@@ -98,5 +98,15 @@ module.exports = {
         date = yyyy + '-' + mm + '-' + dd;
 
         return date;
+    },
+    "getPayableRecievableInfoByCustId": function (custId) {
+        return new Promise(function (resolve, reject) {
+            con.query("SELECT Trade_Date, EX_Date, isin,customer_ID,Security_Name FROM payable_receivable WHERE customer_ID=?", [custId], function (err, result, fields) {
+                if (err) {
+                    reject(err)
+                };
+                resolve(result)
+            });
+        });
     }
 };
