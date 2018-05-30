@@ -66,6 +66,7 @@ define(['jquery', 'settings', 'utils', 'messageTemplates', 'cards', 'uuid'],
                         if (response.result.metadata.endConversation) {
                             var customerId;
                             var customerName;
+                            var subject;
                             var contexts = response.result.contexts;
 
                             console.log("conversation ended");
@@ -83,6 +84,9 @@ define(['jquery', 'settings', 'utils', 'messageTemplates', 'cards', 'uuid'],
                                     customerId = value.parameters.entityId;
                                     customerName = value.parameters.firstName;
                                 }
+                                if(value.name == "subject-info") {
+                                    subject = value.parameters.Subject;
+                                }
                             });
 
                             $.ajax({
@@ -90,7 +94,7 @@ define(['jquery', 'settings', 'utils', 'messageTemplates', 'cards', 'uuid'],
                                 url: config.baseurl + 'chatbot/savehistory',
                                 dataType: "json",
                                 data: {
-                                    "customerId": customerId, "customerName": customerName, "botconversation": JSON.stringify(botconversation)
+                                    "customerId": customerId, "customerName": customerName, "subject":subject,"botconversation": JSON.stringify(botconversation)
                                 },
                                 success: function (response) {
                                     console.log("history saved!!!")

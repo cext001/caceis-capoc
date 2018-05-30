@@ -288,6 +288,15 @@ app.post('/api/webhook', function (req, res) {
                             "platform": "facebook",
                             "speech": "Important date for the corporate actions for your reference.\n\nLast date for response - " + Event_Date + "\n\nPayment date - " + Payment_Date + "\n\nSettlement date - " + Settlement_Date + ""
                         }
+                    ],
+                    contextOut: [
+                        {
+                            name: "subject-info",
+                            parameters: {
+                                Subject: "Customer query on corporate actions"
+                            },
+                            lifespan: 3
+                        }
                     ]
                 }).end();
                 break;
@@ -297,7 +306,16 @@ app.post('/api/webhook', function (req, res) {
                         "type": 0,
                         "platform": "facebook",
                         "speech": "Last date for response - 21-05-2018\nPayment date - 25-05-2018\nSettlement date - 28-05-2018"
-                    }]
+                    }],
+                    contextOut: [
+                        {
+                            name: "subject-info",
+                            parameters: {
+                                Subject: "Customer query on corporate actions"
+                            },
+                            lifespan: 3
+                        }
+                    ]
                 }).end();
                 break;
             /**--------First scenario-Transfer agent END----------**/
@@ -315,7 +333,8 @@ app.post('/api/webhook', function (req, res) {
                 break;
             case "caceis.transferAgentQuery-getEntityId":
                 var entityId = req.body.result.parameters.entityId;
-                var companyName = req.body.result.contexts[0].parameters.companyName;
+                var nameCompanyInfo = _.find(req.body.result.contexts, ['name', 'name-company-info']);
+                var companyName = nameCompanyInfo.parameters.companyName;
                 console.log("entityId :" + entityId + " ,companyName: " + companyName);
 
                 return helper.getCustomerDetails(entityId).then((result) => {
@@ -411,9 +430,11 @@ app.post('/api/webhook', function (req, res) {
                 });
                 break;
             case "caceis.transferAgentQuery-getEntityId-getQuery-confirmation":
-                var isin = req.body.result.contexts[6].parameters.securityISIN;
-                var companyName = req.body.result.contexts[0].parameters.companyName;
-                var customerId = req.body.result.contexts[0].parameters.entityId;
+                var securityInfo = _.find(req.body.result.contexts, ['name', 'security-info']);
+                var nameCompanyInfo = _.find(req.body.result.contexts, ['name', 'name-company-info']);
+                var isin = securityInfo.parameters.securityISIN;
+                var companyName = nameCompanyInfo.parameters.companyName;
+                var customerId = nameCompanyInfo.parameters.entityId;
                 console.log("isin: " + isin + " ,company name: " + companyName + " ,customerId: " + customerId);
 
                 return helper.getHoldingAndCorporateActionData(customerId, isin).then((result) => {
@@ -469,12 +490,13 @@ app.post('/api/webhook', function (req, res) {
                         ]
                     }).end();
                 });
-
                 break;
             case "caceis.transferAgentFinialise":
-                var securityName = req.body.result.contexts[6].parameters.securityName;
-                var customerId = req.body.result.contexts[0].parameters.entityId;
-                var isin = req.body.result.contexts[6].parameters.securityISIN;
+                var securityInfo = _.find(req.body.result.contexts, ['name', 'security-info']);
+                var nameCompanyInfo = _.find(req.body.result.contexts, ['name', 'name-company-info']);
+                var securityName = securityInfo.parameters.securityName;
+                var customerId = nameCompanyInfo.parameters.entityId;
+                var isin = securityInfo.parameters.securityISIN;
                 console.log("isin: " + isin + ", customerId: " + customerId + " , securityName: " + securityName);
 
                 return helper.getTradeStatusBySecurityIdAndCustomerId(isin, customerId).then((result) => {
@@ -515,9 +537,10 @@ app.post('/api/webhook', function (req, res) {
                 });
                 break;
             case "caceis.transferAgentFinialise-confirm":
-                var Event_Date = req.body.result.contexts[7].parameters.Event_Date;
-                var Settlement_Date = req.body.result.contexts[7].parameters.Settlement_Date;
-                var Payment_Date = req.body.result.contexts[7].parameters.Payment_Date;
+                var corporateactionventInfo = _.find(req.body.result.contexts, ['name', 'corporateactionvent-info']);
+                var Event_Date = corporateactionventInfo.parameters.Event_Date;
+                var Settlement_Date = corporateactionventInfo.parameters.Settlement_Date;
+                var Payment_Date = corporateactionventInfo.parameters.Payment_Date;
                 console.log("Payment_Date: " + Payment_Date + " ,Settlement_Date: " + Settlement_Date + " ,Event_Date:" + Event_Date);
 
                 res.json({
@@ -526,6 +549,15 @@ app.post('/api/webhook', function (req, res) {
                             "type": 0,
                             "platform": "facebook",
                             "speech": "Important date for the corporate actions for your reference.\n\nLast date for response - " + Event_Date + "\n\nPayment date - " + Payment_Date + "\n\nSettlement date - " + Settlement_Date + ""
+                        }
+                    ],
+                    contextOut: [
+                        {
+                            name: "subject-info",
+                            parameters: {
+                                Subject: "Reconcilliation issue"
+                            },
+                            lifespan: 3
                         }
                     ]
                 }).end();
@@ -576,8 +608,8 @@ app.post('/api/webhook', function (req, res) {
                 });
                 break;
             case "caceis.payRecRaiseIssue-getCustId-getQuery":
-                var nameCompanyInfo = _.find(req.body.result.contexts, ['name', "name-company-info"]);                
-                var custId = nameCompanyInfo.parameters.entityId;                
+                var nameCompanyInfo = _.find(req.body.result.contexts, ['name', "name-company-info"]);
+                var custId = nameCompanyInfo.parameters.entityId;
                 console.log("custId", custId);
                 return helper.getPayableRecievableInfoByCustId(custId).then((result) => {
                     console.log('payable recievable rs length', result.length);
@@ -689,13 +721,22 @@ app.post('/api/webhook', function (req, res) {
                 var securityOptions = _.find(req.body.result.contexts, ['name', 'securiry-options']);
                 console.log('securityOptions', JSON.stringify(securityOptions));
                 var payableRecievableInfo = _.find(securityOptions.parameters.securityInfo, ['securityISIN', isinNum]);
-                console.log("payableRecievableInfo",payableRecievableInfo);
+                console.log("payableRecievableInfo", payableRecievableInfo);
                 res.json({
                     messages: [
                         {
                             "type": 0,
                             "platform": "facebook",
                             "speech": "Ex date for the corporate action was " + payableRecievableInfo.EX_Date + " however you sold the securities on " + payableRecievableInfo.Trade_Date + "."
+                        }
+                    ],
+                    contextOut: [
+                        {
+                            name: "subject-info",
+                            parameters: {
+                                Subject: "Payables and Receivables"
+                            },
+                            lifespan: 3
                         }
                     ]
                 }).end();
@@ -721,7 +762,7 @@ app.post('/chatbot/savehistory', function (req, res) {
     var dateFormatted = helper.getFormattedDate();
 
     botconversation = JSON.stringify(botconversation);
-    var record = [sessionId, "Chat", req.body.customerId, req.body.customerName, dateFormatted, "Dividend Payout", "", "", botconversation];
+    var record = [sessionId, "Chat", req.body.customerId, req.body.customerName, dateFormatted, req.body.subject, "", "", botconversation];
     console.log("record", record);
 
     return helper.saveChatHistory(record).then((result) => {
