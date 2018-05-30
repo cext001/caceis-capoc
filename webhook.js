@@ -678,7 +678,7 @@ app.post('/api/webhook', function (req, res) {
                         {
                             "type": 0,
                             "platform": "facebook",
-                            "speech": "Ex date for the corporate action was " + payableRecievableInfo.EX_Date + " however you sold the securities on " + payableRecievableInfo.Trade_Date + "."
+                            "speech": "Ex date for the corporate action was " + payableRecievableInfo.parameters.EX_Date + " however you sold the securities on " + payableRecievableInfo.parameters.Trade_Date + "."
                         }
                     ]
                 }).end();
