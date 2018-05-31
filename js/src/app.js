@@ -8,13 +8,6 @@ This file is part of the Innovation LAB - Offline Bot.
 define(['jquery', 'settings', 'apiService', 'utils'], function ($, config, apiService, utils) {
 
     $(function () {
-        $("a#google_oauth_login").click(function () {
-            console.log("srini");
-            const remote = require('electron').remote;
-            const BrowserWindow = remote.BrowserWindow
-            var win1 = new BrowserWindow({ width: 800, height: 600, frame: false });
-
-        });
 
         function sendMessage(refr, ev, refs) {
 
@@ -59,12 +52,22 @@ define(['jquery', 'settings', 'apiService', 'utils'], function ($, config, apiSe
             msg_container.removeClass('hidden');
         }
         $("a#btn-send-message").click(function (e) {
-            sendMessage($("#btn-input"), e);
+            if($("#btn-input").val() == "") {
+                $('#btn-send-message').attr('disabled', true);
+            } else {
+                $('#btn-send-message').attr('disabled', false)
+                sendMessage($("#btn-input"), e);
+            }
         });
         //Chatbox Send message
         $("#btn-input").keypress(function (e) {
             if (e.which == 13) {
-                sendMessage($(this), e);
+                if($("#btn-input").val() == "") {
+                    $('#btn-send-message').attr('disabled', true);
+                } else {
+                    $('#btn-send-message').attr('disabled', false)
+                    sendMessage($("#btn-input"), e);
+                }
             }
         });
         //Quick Replies payload button Click

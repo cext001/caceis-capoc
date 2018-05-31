@@ -777,7 +777,7 @@ app.post('/chatbot/savehistory', function (req, res) {
     return helper.saveChatHistory(record).then((result) => {
         res.send("saved history")
     }).catch((err) => {
-        console.log("err", err);
+        console.log("history save err", err);
         res.send("Something went wrong");
     });
 });
