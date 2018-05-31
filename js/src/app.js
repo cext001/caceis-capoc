@@ -60,12 +60,12 @@ define(['jquery', 'settings', 'apiService', 'utils'], function ($, config, apiSe
             }
         });
         //Chatbox Send message
-        $("#btn-input").keypress(function (e) {
-            if (e.which == 13) {
-                if($("#btn-input").val() == "") {
-                    $('#btn-send-message').attr('disabled', true);
-                } else {
-                    $('#btn-send-message').attr('disabled', false)
+        $("#btn-input").keypress(function (e) {            
+            if($("#btn-input").val() == "") {
+                $('#btn-send-message').attr('disabled', true);
+            } else {
+                $('#btn-send-message').attr('disabled', false)
+                if (e.which == 13) {
                     sendMessage($("#btn-input"), e);
                 }
             }
