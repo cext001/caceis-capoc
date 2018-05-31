@@ -575,6 +575,7 @@ app.post('/api/webhook', function (req, res) {
                 break;
             case "caceis.payRecRaiseIssue-getCustId":
                 var nameCompanyInfo = _.find(req.body.result.contexts, ['name', "name-company-info"]);
+                var customerInfo = _.find(req.body.result.contexts, ['name', "customer-info"]);
                 var custId = req.body.result.parameters.entityId;
                 console.log("nameCompanyInfo", nameCompanyInfo);
                 console.log("custId", custId);
@@ -585,7 +586,7 @@ app.post('/api/webhook', function (req, res) {
                             messages: [{
                                 "type": 0,
                                 "platform": "facebook",
-                                "speech": "Alright , he has custody accont with " + nameCompanyInfo.parameters.companyName + ".?"
+                                "speech": "Alright , he has custody accont with " + customerInfo.parameters.Customer_Name + ".?"
                             }],
                             contextOut: [
                                 {
