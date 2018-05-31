@@ -759,6 +759,14 @@ app.post('/api/webhook', function (req, res) {
                     }]
                 }).end();
                 break;
+            case "caceis.testIntent":
+                res.json({
+                    messages: [{
+                        "type": 0,
+                        "speech": "Test intent fired."
+                    }]
+                }).end();
+                break;
         }
     }
 });
