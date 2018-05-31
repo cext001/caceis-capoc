@@ -47,7 +47,7 @@ app.post('/api/webhook', function (req, res) {
                         {
                             "type": 0,
                             "platform": "facebook",
-                            "speech": "Can you tell me in a few words how I can help you ?."
+                            "speech": "What's this query related to ?"
                         }
                     ]
                 }).end();
@@ -586,7 +586,17 @@ app.post('/api/webhook', function (req, res) {
                                 "type": 0,
                                 "platform": "facebook",
                                 "speech": "Alright , he has custody accont with " + nameCompanyInfo.parameters.companyName + ".?"
-                            }]
+                            }],
+                            contextOut: [
+                                {
+                                    name: "customer-info",
+                                    parameters: {
+                                        Customer_Name: result[0].Customer_Name,
+                                        Customer_ID: result[0].Customer_ID
+                                    },
+                                    lifespan: 5
+                                }
+                            ]
                         }).end();
                     } else {
                         res.json({
@@ -675,7 +685,7 @@ app.post('/api/webhook', function (req, res) {
                         {
                             "type": 0,
                             "platform": "facebook",
-                            "speech": "Ex date for the corporate action was " + payableRecievableInfo.parameters.EX_Date + " however you " + tradeAction + " the securities on " + payableRecievableInfo.parameters.Trade_Date + "."
+                            "speech": "The customer " + tradeAction + " the securities on " + payableRecievableInfo.parameters.Trade_Date + " and the Ex date for the corporate action was" + payableRecievableInfo.parameters.EX_Date
                         },
                         {
                             "type": 0,
