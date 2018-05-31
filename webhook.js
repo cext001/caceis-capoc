@@ -669,13 +669,13 @@ app.post('/api/webhook', function (req, res) {
                 var bankInfo = _.find(req.body.result.contexts, ['name', "bank-info"]);
                 console.log('payableRecievableInfo', JSON.stringify(payableRecievableInfo));
                 var tradeAction = (payableRecievableInfo.parameters.Trade_Action == "Buy") ? "bought" : "sold";
-                var summaryMessage = (payableRecievableInfo.parameters.Trade_Action == "Buy") ? "This makes the claim against you." : "This makes the claim against "+bankInfo.parameters.bankName;
+                var summaryMessage = (payableRecievableInfo.parameters.Trade_Action == "Buy") ? "This makes the claim against you." : "This makes the claim against " + bankInfo.parameters.bankName;
                 res.json({
                     messages: [
                         {
                             "type": 0,
                             "platform": "facebook",
-                            "speech": "Ex date for the corporate action was " + payableRecievableInfo.parameters.EX_Date + " however you "+tradeAction+" the securities on " + payableRecievableInfo.parameters.Trade_Date + "."
+                            "speech": "Ex date for the corporate action was " + payableRecievableInfo.parameters.EX_Date + " however you " + tradeAction + " the securities on " + payableRecievableInfo.parameters.Trade_Date + "."
                         },
                         {
                             "type": 0,
@@ -701,15 +701,6 @@ app.post('/api/webhook', function (req, res) {
                         "type": 0,
                         "speech": "Happy to help you. Have a nice day."
                     }]
-                }).end();
-                break;
-            case "caceis.testIntent":
-                res.json({
-                    messages: [{
-                        "type": 0,
-                        "speech": "Test intent fired."
-                    }],
-                    actionIncomplete: true,
                 }).end();
                 break;
         }
