@@ -664,7 +664,7 @@ app.post('/api/webhook', function (req, res) {
                     }).end();
                 });
                 break;
-            case "caceis.payRecRaiseIssue-getCustId-yes-yes":
+            case "caceis.payRecRaiseIssue-getCustId-yes-confirm":
                 var payableRecievableInfo = _.find(req.body.result.contexts, ['name', "selected-securiry-info"]);
                 var bankInfo = _.find(req.body.result.contexts, ['name', "bank-info"]);
                 console.log('payableRecievableInfo', JSON.stringify(payableRecievableInfo));
