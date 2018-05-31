@@ -52,20 +52,14 @@ define(['jquery', 'settings', 'apiService', 'utils'], function ($, config, apiSe
             msg_container.removeClass('hidden');
         }
         $("a#btn-send-message").click(function (e) {
-            if($("#btn-input").val() == "") {
-                $('#btn-send-message').attr('disabled', true);
-            } else {
-                $('#btn-send-message').attr('disabled', false)
+            if($("#btn-input").val() != "") {
                 sendMessage($("#btn-input"), e);
             }
         });
         //Chatbox Send message
         $("#btn-input").keypress(function (e) {            
-            if($("#btn-input").val() == "") {
-                $('#btn-send-message').attr('disabled', true);
-            } else {
-                $('#btn-send-message').attr('disabled', false)
-                if (e.which == 13) {
+            if (e.which == 13) {
+                if($("#btn-input").val() != "") {
                     sendMessage($("#btn-input"), e);
                 }
             }
