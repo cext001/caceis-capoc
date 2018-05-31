@@ -576,6 +576,8 @@ app.post('/api/webhook', function (req, res) {
             case "caceis.payRecRaiseIssue-getCustId":
                 var nameCompanyInfo = _.find(req.body.result.contexts, ['name', "name-company-info"]);
                 var custId = req.body.result.parameters.entityId;
+                console.log("nameCompanyInfo", nameCompanyInfo);
+                console.log("custId", custId);
                 return helper.getCustomerDetails(custId).then((result) => {
                     console.log('customer count', result.length);
                     if (result.length > 0) {
@@ -583,7 +585,7 @@ app.post('/api/webhook', function (req, res) {
                             messages: [{
                                 "type": 0,
                                 "platform": "facebook",
-                                "speech": "Alright , he has custody accont with " + nameCompanyInfo.companyName + ".?"
+                                "speech": "Alright , he has custody accont with " + nameCompanyInfo.parameters.companyName + ".?"
                             }]
                         }).end();
                     } else {
