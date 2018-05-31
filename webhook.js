@@ -569,11 +569,12 @@ app.post('/api/webhook', function (req, res) {
                     messages: [{
                         "type": 0,
                         "platform": "facebook",
-                        "speech": "Please share the customer id."
+                        "speech": "Please share the customers's account number with us ?"
                     }]
                 }).end();
                 break;
             case "caceis.payRecRaiseIssue-getCustId":
+                var nameCompanyInfo = _.find(req.body.result.contexts, ['name', "name-company-info"]);
                 var custId = req.body.result.parameters.entityId;
                 return helper.getCustomerDetails(custId).then((result) => {
                     console.log('customer count', result.length);
@@ -582,7 +583,7 @@ app.post('/api/webhook', function (req, res) {
                             messages: [{
                                 "type": 0,
                                 "platform": "facebook",
-                                "speech": "Thanks for sharing the information. Could you please share your query ?"
+                                "speech": "Alright , he has custody accont with " + nameCompanyInfo.companyName + ".?"
                             }]
                         }).end();
                     } else {
@@ -607,78 +608,36 @@ app.post('/api/webhook', function (req, res) {
                     }).end();
                 });
                 break;
-            case "caceis.payRecRaiseIssue-getCustId-getQuery":
+            case "caceis.payRecRaiseIssue-getCustId-yes":
                 var nameCompanyInfo = _.find(req.body.result.contexts, ['name', "name-company-info"]);
                 var custId = nameCompanyInfo.parameters.entityId;
                 console.log("custId", custId);
                 return helper.getPayableRecievableInfoByCustId(custId).then((result) => {
                     console.log('payable recievable rs length', result.length);
                     if (result.length > 0) {
-                        if (result.length == 1) {
-                            res.json({
-                                messages: [
-                                    {
-                                        "type": 0,
-                                        "platform": "facebook",
-                                        "speech": "You are talking about , ISIN number " + result[0].isin + " and  Stock name - " + result[0].Security_Name + " ?"
-                                    }
-                                ],
-                                contextOut: [
-                                    {
-                                        name: "selected-securiry-info",
-                                        parameters: {
-                                            securityISIN: result[0].isin,
-                                            securityName: result[0].Security_Name,
-                                            Trade_Date: result[0].Trade_Date,
-                                            EX_Date: result[0].EX_Date,
-                                            customer_ID: result[0].customer_ID
-                                        },
-                                        lifespan: 5
-                                    }
-                                ]
-                            }).end();
-                        } else {
-                            var response = {
-                                messages: [
-                                    {
-                                        "type": 0,
-                                        "platform": "facebook",
-                                        "speech": "I notice that there are multiple records."
+                        res.json({
+                            messages: [
+                                {
+                                    "type": 0,
+                                    "platform": "facebook",
+                                    "speech": "You are referring to  ISIN number " + result[0].isin + " and  Stock name - " + result[0].Security_Name + " ?"
+                                }
+                            ],
+                            contextOut: [
+                                {
+                                    name: "selected-securiry-info",
+                                    parameters: {
+                                        securityISIN: result[0].isin,
+                                        securityName: result[0].Security_Name,
+                                        Trade_Date: result[0].Trade_Date,
+                                        EX_Date: result[0].EX_Date,
+                                        customer_ID: result[0].customer_ID,
+                                        Trade_Action: result[0].Trade_Action
                                     },
-                                    {
-                                        "type": 1,
-                                        "platform": "facebook",
-                                        "title": "Please select the appropriate from the below",
-                                        "subtitle": "",
-                                        "buttons": []
-                                    }
-                                ],
-                                contextOut: [
-                                    {
-                                        name: "securiry-options",
-                                        parameters: {
-                                            securityInfo: []
-                                        },
-                                        lifespan: 5
-                                    }
-                                ]
-                            };
-                            _.forEach(result, function (value, key) {
-                                response.messages[1].buttons.push({
-                                    "text": value.isin + " - " + value.Security_Name,
-                                    "postback": value.isin
-                                });
-                                response.contextOut[0].parameters.securityInfo.push({
-                                    securityISIN: value.isin,
-                                    securityName: value.Security_Name,
-                                    Trade_Date: value.Trade_Date,
-                                    EX_Date: value.EX_Date,
-                                    customer_ID: value.customer_ID
-                                });
-                            });
-                            console.log("response", response);
-                            res.json(response).end();
-                        }
+                                    lifespan: 5
+                                }
+                            ]
+                        }).end();
                     } else {
                         res.json({
                             messages: [
@@ -703,40 +662,23 @@ app.post('/api/webhook', function (req, res) {
                     }).end();
                 });
                 break;
-            case "caceis.payRecRaiseIssue-getCustId-getQuery-confirm":
+            case "caceis.payRecRaiseIssue-getCustId-yes-yes":
                 var payableRecievableInfo = _.find(req.body.result.contexts, ['name', "selected-securiry-info"]);
+                var bankInfo = _.find(req.body.result.contexts, ['name', "bank-info"]);
                 console.log('payableRecievableInfo', JSON.stringify(payableRecievableInfo));
+                var tradeAction = (payableRecievableInfo.parameters.Trade_Action == "Buy") ? "bought" : "sold";
+                var summaryMessage = (payableRecievableInfo.parameters.Trade_Action == "Buy") ? "This makes the claim against you." : "This makes the claim against "+bankInfo.parameters.bankName;
                 res.json({
                     messages: [
                         {
                             "type": 0,
                             "platform": "facebook",
-                            "speech": "Ex date for the corporate action was " + payableRecievableInfo.parameters.EX_Date + " however you sold the securities on " + payableRecievableInfo.parameters.Trade_Date + "."
-                        }
-                    ],
-                    contextOut: [
-                        {
-                            name: "subject-info",
-                            parameters: {
-                                Subject: "Payables and Receivables"
-                            },
-                            lifespan: 3
-                        }
-                    ]
-                }).end();
-                break;
-            case "caceis.payRecRaiseIssue-getCustId-getQuery-getISINNum":
-                var isinNum = req.body.result.parameters.isinNum;
-                var securityOptions = _.find(req.body.result.contexts, ['name', 'securiry-options']);
-                console.log('securityOptions', JSON.stringify(securityOptions));
-                var payableRecievableInfo = _.find(securityOptions.parameters.securityInfo, ['securityISIN', isinNum]);
-                console.log("payableRecievableInfo", payableRecievableInfo);
-                res.json({
-                    messages: [
+                            "speech": "Ex date for the corporate action was " + payableRecievableInfo.parameters.EX_Date + " however you "+tradeAction+" the securities on " + payableRecievableInfo.parameters.Trade_Date + "."
+                        },
                         {
                             "type": 0,
                             "platform": "facebook",
-                            "speech": "Ex date for the corporate action was " + payableRecievableInfo.EX_Date + " however you sold the securities on " + payableRecievableInfo.Trade_Date + "."
+                            "speech": summaryMessage
                         }
                     ],
                     contextOut: [
