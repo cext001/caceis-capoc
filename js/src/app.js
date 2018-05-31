@@ -52,14 +52,14 @@ define(['jquery', 'settings', 'apiService', 'utils'], function ($, config, apiSe
             msg_container.removeClass('hidden');
         }
         $("a#btn-send-message").click(function (e) {
-            if($("#btn-input").val() != "") {
+            if(($("#btn-input").val()).trim() != "") {
                 sendMessage($("#btn-input"), e);
             }
         });
         //Chatbox Send message
         $("#btn-input").keypress(function (e) {            
             if (e.which == 13) {
-                if($("#btn-input").val() != "") {
+                if(($("#btn-input").val()).trim() != "") {
                     sendMessage($("#btn-input"), e);
                 }
             }
