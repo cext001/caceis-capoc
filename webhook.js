@@ -764,7 +764,8 @@ app.post('/api/webhook', function (req, res) {
                     messages: [{
                         "type": 0,
                         "speech": "Test intent fired."
-                    }]
+                    }],
+                    actionIncomplete: true,
                 }).end();
                 break;
         }
