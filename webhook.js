@@ -5,13 +5,8 @@ var express = require('express'),
     bodyParser = require('body-parser')
 mysql = require('mysql')
 _ = require('lodash')
-helper = require('./helper')
-cookieSession = require('cookie-session');
+helper = require('./helper');
 
-app.use(cookieSession({
-    name: 'session',
-    keys: ['key1', 'key2']
-}))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
 
@@ -28,11 +23,6 @@ app.get('/chat', function (req, res) {
 });
 app.get('/caccenter', function (req, res) {
     console.log("custid", req.query.custid)
-    req.session.custid = "";
-    if (req.query.custid) {
-        req.session.custid = req.query.custid;
-    }
-    console.log(req.session);
     res.sendFile(__dirname + '/caccenter.html');
 });
 app.post('/api/webhook', function (req, res) {
@@ -41,7 +31,6 @@ app.post('/api/webhook', function (req, res) {
         console.log("Action: " + req.body.result.action + ", Intent: " + req.body.result.metadata.intentName);
         switch (req.body.result.action) {
             case "input.welcome":
-                console.log("sess", req.session);
                 res.json({
                     messages: [{
                         "type": 0,
@@ -118,7 +107,7 @@ app.post('/api/webhook', function (req, res) {
 
                 //need to handle these items
                 var companyName = nameCompanyInfo.parameters.companyName;
-                var customerId = nameCompanyInfo.parameters.entityId;
+                var customerId = req.body.sessionId.split("@")[0];
 
                 console.log("isin: " + isin + " ,company name: " + companyName + " ,customerId: " + customerId);
 
@@ -166,7 +155,7 @@ app.post('/api/webhook', function (req, res) {
                 var securityInfo = _.find(req.body.result.contexts, ['name', 'security-info']);
                 var nameCompanyInfo = _.find(req.body.result.contexts, ['name', 'name-company-info']);
                 var securityName = securityInfo.parameters.securityName;
-                var customerId = nameCompanyInfo.parameters.entityId;
+                var customerId = req.body.sessionId.split("@")[0];
                 var isin = securityInfo.parameters.securityISIN;
                 console.log("isin: " + isin + ", customerId: " + customerId + " , securityName: " + securityName);
 

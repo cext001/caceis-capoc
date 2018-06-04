@@ -18,6 +18,16 @@ define(['jquery', 'settings', 'utils', 'messageTemplates', 'cards', 'uuid'],
                 };
             }
 
+            getParameterByName(name, url) {
+                if (!url) url = window.location.href;
+                name = name.replace(/[\[\]]/g, "\\$&");
+                var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                    results = regex.exec(url);
+                if (!results) return null;
+                if (!results[2]) return '';
+                return decodeURIComponent(results[2].replace(/\+/g, " "));
+            }
+
             userSays(userInput, callback) {
                 callback(null, messageTpl.userplaintext({
                     "payload": userInput,
@@ -31,6 +41,13 @@ define(['jquery', 'settings', 'utils', 'messageTemplates', 'cards', 'uuid'],
             askBot(userInput, callback) {
                 this.userSays(userInput, callback);
                 var referrer = document.referrer;
+                var custid = this.getParameterByName("custid", referrer);
+                var tradeid = this.getParameterByName("tradeid", referrer);
+                console.log("custId", custid);
+                console.log("referrer", referrer);
+                if(custid && tradeid) {
+                    this.options.sessionId = custid+"@"+tradeid;
+                }
                 this.options.query = userInput;
                 console.log('options', this.options);
                 $.ajax({
@@ -80,11 +97,11 @@ define(['jquery', 'settings', 'utils', 'messageTemplates', 'cards', 'uuid'],
                                 if (value.name == "customer-name") {
                                     customerName = value.parameters.clientName;
                                 }
-                                if(value.name == "name-company-info") {
+                                if (value.name == "name-company-info") {
                                     customerId = value.parameters.entityId;
                                     customerName = value.parameters.firstName;
                                 }
-                                if(value.name == "subject-info") {
+                                if (value.name == "subject-info") {
                                     subject = value.parameters.Subject;
                                 }
                             });
@@ -94,7 +111,7 @@ define(['jquery', 'settings', 'utils', 'messageTemplates', 'cards', 'uuid'],
                                 url: config.baseurl + 'chatbot/savehistory',
                                 dataType: "json",
                                 data: {
-                                    "customerId": customerId, "customerName": customerName, "subject":subject,"botconversation": JSON.stringify(botconversation)
+                                    "customerId": customerId, "customerName": customerName, "subject": subject, "botconversation": JSON.stringify(botconversation)
                                 },
                                 success: function (response) {
                                     console.log("history saved!!!")
