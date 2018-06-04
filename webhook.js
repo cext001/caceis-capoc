@@ -6,19 +6,12 @@ var express = require('express'),
 mysql = require('mysql')
 _ = require('lodash')
 helper = require('./helper')
-cookieParser = require('cookie-parser');
-session = require('express-session');;
+cookieSession = require('cookie-session');
 
-app.use(cookieParser());
-app.use(session({
-    secret: 'NAEMETALPRELIOBTNAVRES',
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-        secure: false, // Secure is Recommeneded, However it requires an HTTPS enabled website (SSL Certificate)
-        maxAge: 864000000 // 10 Days in miliseconds
-    }
-}));
+app.use(cookieSession({
+    name: 'session',
+    keys: ['key1', 'key2']
+}))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
 
