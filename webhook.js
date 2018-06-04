@@ -226,7 +226,7 @@ app.post('/api/webhook', function (req, res) {
                 var customerId = req.body.sessionId.split("@")[0];
                 var tradeId = req.body.sessionId.split("@")[1];
                 console.log("customerId:" + customerId + ", tradeId:" + tradeId);
-                return helper.getPayableRecievableInfoByCustId(customerId, tradeId).then((result) => {
+                return helper.getTradeInfoByCustIdAndTradeId(customerId, tradeId).then((result) => {
                     console.log("rese", result[0].Counter_Party_Name);
                     console.log('tradeinfo count', result.length);
                     if (result.length > 0) {
@@ -412,7 +412,7 @@ app.post('/chatbot/savehistory', function (req, res) {
 
 app.get('/test', function (req, res) {
     console.log("SSESSS", req.session);
-    return helper.getPayableRecievableInfoByCustId("615201508040").then((result) => {
+    return helper.getTradeInfoByCustIdAndTradeId('615201508040', 'T45456971').then((result) => {
         console.log("rese", result[0]);
         res.send("succ")
     }).catch((err) => {
