@@ -412,8 +412,8 @@ app.post('/chatbot/savehistory', function (req, res) {
 
 app.get('/test', function (req, res) {
     console.log("SSESSS", req.session);
-    return helper.getPayableRecievableInfoByCustId("615201337788", "T118188177").then((result) => {
-        console.log("rese", result[0].Counter_Party_Name);
+    return helper.getPayableRecievableInfoByCustId("615201508040").then((result) => {
+        console.log("rese", result[0]);
         res.send("succ")
     }).catch((err) => {
         console.log("err", err);
