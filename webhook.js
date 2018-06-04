@@ -27,11 +27,11 @@ app.get('/chat', function (req, res) {
 });
 app.get('/caccenter', function (req, res) {
     console.log("custid", req.query.custid)
+    req.session.custid = "";
     if (req.query.custid) {
         req.session.custid = req.query.custid;
-    } else {
-        req.session.custid = "";
     }
+    console.log(req.session);
     res.sendFile(__dirname + '/caccenter.html');
 });
 app.post('/api/webhook', function (req, res) {
