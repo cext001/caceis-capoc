@@ -33,20 +33,25 @@ app.post('/api/webhook', function (req, res) {
             case "input.welcome":
                 var customerId = req.body.sessionId.split("@")[0];
                 var tradeId = req.body.sessionId.split("@")[1];
-                var response = {
-                    messages: [{
-                        "type": 0,
-                        "platform": "facebook",
-                        "speech": "Hi , I'm Rosy , How can I help you today."
-                    }]
-                };
+                var response;
                 if (tradeId && customerId) {
-                    response.followupEvent = [
-                        {
-                            "name": "choose_payrec"
-                        }
-                    ]
+                    response = {
+                        followupEvent: [
+                            {
+                                "name": "choose_payrec"
+                            }
+                        ]
+                    }
+                } else {
+                    response = {
+                        messages: [{
+                            "type": 0,
+                            "platform": "facebook",
+                            "speech": "Hi , I'm Rosy , How can I help you today."
+                        }]
+                    };
                 }
+                console.log("response",response);
                 res.json(response).end();
                 break;
             case "caceis.nameCompanyIntent":
