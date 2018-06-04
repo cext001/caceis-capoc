@@ -338,7 +338,7 @@ app.post('/api/webhook', function (req, res) {
                         {
                             "type": 0,
                             "platform": "facebook",
-                            "speech": "Our customer Mr " + payableRecievableInfo.parameters.Customer_Name + " " + payableRecievableInfo.parameters.tradeAction + " " + payableRecievableInfo.parameters.quantity + " shares of " + payableRecievableInfo.parameters.securityName + " on trade date " + payableRecievableInfo.parameters.Trade_Date + " and the ex-date for CA is " + payableRecievableInfo.parameters.EX_Date
+                            "speech": "Our customer Mr " + payableRecievableInfo.parameters.Customer_Name + " " + payableRecievableInfo.parameters.Trade_Action + " " + payableRecievableInfo.parameters.quantity + " shares of " + payableRecievableInfo.parameters.securityName + " on trade date " + payableRecievableInfo.parameters.Trade_Date + " and the ex-date for CA is " + payableRecievableInfo.parameters.EX_Date
                         },
                         {
                             "type": 0,
