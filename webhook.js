@@ -5,12 +5,13 @@ var express = require('express'),
     bodyParser = require('body-parser')
 mysql = require('mysql')
 _ = require('lodash')
-helper = require('./helper');
+helper = require('./helper')
+cookieParser = require('cookie-parser');
+session = require('express-session');;
 
-
-app.use(bodyParser.urlencoded({
-    extended: false
-}))
+app.use(cookieParser());
+app.use(session({ secret: "H1EcaXceC5%$AoWeiA*sRP_E" }));
+app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
 
 const REST_PORT = process.env.PORT || 3000;
@@ -25,6 +26,12 @@ app.get('/chat', function (req, res) {
     res.sendFile(__dirname + '/chat.html');
 });
 app.get('/caccenter', function (req, res) {
+    console.log("custid", req.query.custid)
+    if (req.query.custid) {
+        req.session.custid = req.query.custid;
+    } else {
+        req.session.custid = "";
+    }
     res.sendFile(__dirname + '/caccenter.html');
 });
 app.post('/api/webhook', function (req, res) {
@@ -33,6 +40,7 @@ app.post('/api/webhook', function (req, res) {
         console.log("Action: " + req.body.result.action + ", Intent: " + req.body.result.metadata.intentName);
         switch (req.body.result.action) {
             case "input.welcome":
+                console.log("custid", req.session.custid);
                 res.json({
                     messages: [{
                         "type": 0,

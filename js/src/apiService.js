@@ -30,7 +30,7 @@ define(['jquery', 'settings', 'utils', 'messageTemplates', 'cards', 'uuid'],
             }
             askBot(userInput, callback) {
                 this.userSays(userInput, callback);
-
+                var referrer = document.referrer;
                 this.options.query = userInput;
                 console.log('options', this.options);
                 $.ajax({
@@ -39,7 +39,7 @@ define(['jquery', 'settings', 'utils', 'messageTemplates', 'cards', 'uuid'],
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     headers: {
-                        "Authorization": "Bearer " + config.accessToken
+                        "Authorization": "Bearer " + config.accessToken,
                     },
                     data: JSON.stringify(this.options),
                     success: function (response) {

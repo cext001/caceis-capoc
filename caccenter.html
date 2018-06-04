@@ -127,21 +127,13 @@
             <div class="colrightimg"></div>
         </div>
     </div>
-        <a style="margin-bottom:15px;margin-right:10px;position:fixed;bottom: 0px;right: 7px;z-index:1000;background-color:#c20a37;"
-            class="btn pmd-btn-fab  pull-right pmd-btn-raised pmd-ripple-effect  btn-primary" id="webChat" data-trigger="click" data-toggle="popover"
+        <a class="btn pmd-btn-fab pmd-btn-raised pmd-ripple-effect  btn-primary" id="webChat" data-trigger="click" data-toggle="popover"
             data-placement="top" data-content="<iframe  src='https://caceis-capoc.herokuapp.com/chat.html?popup=1' width='390' height='510' style='border:none'></iframe>"
             data-html="true" href="javascript:void(0);">
             <span class="pmd-floating-hidden">Primary</span>
             <i id="webChatPrimaryIcon" class="material-icons md-light pmd-sm">chat</i>
             <i id="webChatCloseIcon" class="material-icons md-light pmd-sm" style="display: none">close</i>
         </a>
-        <!--<a class="btn pmd-btn-fab pmd-btn-raised pmd-ripple-effect  btn-primary" id="webChat" data-trigger="click" data-toggle="popover"
-            data-placement="top" data-content="<iframe  src='http://localhost:3000/chat.html?popup=1' height='510' width='300' style='border:none'></iframe>"
-            data-html="true" href="javascript:void(0);">
-            <span class="pmd-floating-hidden">Primary</span>
-            <i id="webChatPrimaryIcon" class="material-icons md-light pmd-sm">chat</i>
-            <i id="webChatCloseIcon" class="material-icons md-light pmd-sm" style="display: none">close</i>
-        </a>-->
     <div class="footer">
 
         <div>
@@ -231,6 +223,7 @@
     <script data-main="js/require-setup" src="require.js"></script>
     <script>
         function bindPopoverEvents() {
+            
             $('#webChat').on('hide.bs.popover', function () {
                 $("#webChatPrimaryIcon").show();
                 $("#webChatCloseIcon").hide();
