@@ -357,7 +357,7 @@ app.post('/api/webhook', function (req, res) {
                     ]
                 }).end();
                 break;
-            case "caceis.payRecRaiseIssue-yes-yes":
+            case "caceis.payRecRaiseIssue-yes-confirm":
                 res.json({
                     messages: [
                         {
