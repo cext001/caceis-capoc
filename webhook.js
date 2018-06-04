@@ -41,7 +41,7 @@ app.post('/api/webhook', function (req, res) {
                     }]
                 };
                 if (tradeId && customerId) {
-                    response.events = [
+                    response.followupEvent = [
                         {
                             "name": "choose_payrec"
                         }
