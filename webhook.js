@@ -333,19 +333,17 @@ app.post('/api/webhook', function (req, res) {
                 var bankInfo = _.find(req.body.result.contexts, ['name', "bank-info"]);
                 console.log('payableRecievableInfo', JSON.stringify(payableRecievableInfo));
                 var tradeAction = (payableRecievableInfo.parameters.Trade_Action == "Buy") ? "bought" : "sold";
-                //what is the new summary message
-                var summaryMessage = (payableRecievableInfo.parameters.Trade_Action == "Buy") ? "This makes the claim against you." : "This makes the claim against " + bankInfo.parameters.bankName;
                 res.json({
                     messages: [
                         {
                             "type": 0,
                             "platform": "facebook",
-                            "speech": "Our customer Mr " + payableRecievableInfo.parameters.Customer_Name + " " + payableRecievableInfo.parameterstradeAction + " " + payableRecievableInfo.parameters.quantity + " shares of " + payableRecievableInfo.parameters.Security_Name + " on trade date " + payableRecievableInfo.parameters.Trade_Date + " and the ex-date for CA is " + payableRecievableInfo.parameters.EX_Date
+                            "speech": "Our customer Mr " + payableRecievableInfo.parameters.Customer_Name + " " + payableRecievableInfo.parameters.tradeAction + " " + payableRecievableInfo.parameters.quantity + " shares of " + payableRecievableInfo.parameters.securityName + " on trade date " + payableRecievableInfo.parameters.Trade_Date + " and the ex-date for CA is " + payableRecievableInfo.parameters.EX_Date
                         },
                         {
                             "type": 0,
                             "platform": "facebook",
-                            "speech": summaryMessage
+                            "speech": "This makes our customer entitle to receive the cash dividend"
                         }
                     ],
                     contextOut: [
