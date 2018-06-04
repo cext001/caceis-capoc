@@ -10,7 +10,15 @@ cookieParser = require('cookie-parser');
 session = require('express-session');;
 
 app.use(cookieParser());
-app.use(session({ secret: "H1EcaXceC5%$AoWeiA*sRP_E", resave: true, saveUninitialized: true }));
+app.use(session({
+    secret: 'NAEMETALPRELIOBTNAVRES',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        secure: false, // Secure is Recommeneded, However it requires an HTTPS enabled website (SSL Certificate)
+        maxAge: 864000000 // 10 Days in miliseconds
+    }
+}));
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
 
@@ -401,7 +409,7 @@ app.post('/chatbot/savehistory', function (req, res) {
 });
 
 app.get('/test', function (req, res) {
-    console.log("SSESSS",req.session);
+    console.log("SSESSS", req.session);
     return helper.getPayableRecievableInfoByCustId("22222222").then((result) => {
         console.log('rs1', result.length);
         var test = _.find(result, ['Security_Name', "Infosys"]);
