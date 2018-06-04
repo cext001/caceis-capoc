@@ -222,52 +222,36 @@ app.post('/api/webhook', function (req, res) {
                 break;
             /**--------Second scenario-Reconciliation issue END----------**/
             /**--------Third scenario-Payables and Receivables START----------**/
-            case "caceis.payRecRaiseIssue":
-                res.json({
-                    messages: [{
-                        "type": 0,
-                        "platform": "facebook",
-                        "speech": "Please share the customers's account number with us ?"
-                    }]
-                }).end();
-                break;
-            case "caceis.payRecRaiseIssue-getCustId":
-                var nameCompanyInfo = _.find(req.body.result.contexts, ['name', "name-company-info"]);
-                var customerInfo = _.find(req.body.result.contexts, ['name', "customer-info"]);
-                var custId = req.body.result.parameters.entityId;
-                console.log("nameCompanyInfo", nameCompanyInfo);
-                console.log("custId", custId);
-                return helper.getCustomerDetails(custId).then((result) => {
-                    console.log('customer count', result.length);
+            case "caceis.confirmPayRec":
+                var customerId = req.body.sessionId.split("@")[0];
+                var tradeId = req.body.sessionId.split("@")[1];
+                console.log("customerId:" + customerId + ", tradeId:" + tradeId);
+                return helper.getPayableRecievableInfoByCustId(customerId, tradeId).then((result) => {
+                    console.log("rese", result[0].Counter_Party_Name);
+                    console.log('tradeinfo count', result.length);
                     if (result.length > 0) {
                         res.json({
                             messages: [{
                                 "type": 0,
                                 "platform": "facebook",
-                                "speech": "Alright , he has custody accont with " + customerInfo.parameters.Customer_Name + ".?"
-                            }],
-                            contextOut: [
-                                {
-                                    name: "customer-info",
-                                    parameters: {
-                                        Customer_Name: result[0].Customer_Name,
-                                        Customer_ID: result[0].Customer_ID
-                                    },
-                                    lifespan: 5
-                                }
-                            ]
+                                "speech": "Hi , I am Rosy"
+                            }, {
+                                "type": 0,
+                                "platform": "facebook",
+                                "speech": "Mr " + result[0].Counter_Party_Name + ", whether your query is in regard to our claims e-mail"
+                            }]
                         }).end();
                     } else {
                         res.json({
                             messages: [{
                                 "type": 0,
                                 "platform": "facebook",
-                                "speech": "Cant find account information. Please try again."
+                                "speech": "Unable to find counterparty info."
                             }]
                         }).end();
                     }
                 }).catch((err) => {
-                    console.log("get customer details err", err);
+                    console.log("tradeinfo details err", err);
                     res.json({
                         messages: [
                             {
@@ -279,11 +263,20 @@ app.post('/api/webhook', function (req, res) {
                     }).end();
                 });
                 break;
-            case "caceis.payRecRaiseIssue-getCustId-yes":
-                var nameCompanyInfo = _.find(req.body.result.contexts, ['name', "name-company-info"]);
-                var custId = nameCompanyInfo.parameters.entityId;
-                console.log("custId", custId);
-                return helper.getPayableRecievableInfoByCustId(custId).then((result) => {
+            case "caceis.choosePayRec-yes":
+                res.json({
+                    messages: [{
+                        "type": 0,
+                        "platform": "facebook",
+                        "speech": "Could you please explain the quey in few words."
+                    }]
+                }).end();
+                break;
+            case "caceis.payRecRaiseIssue":
+                var customerId = req.body.sessionId.split("@")[0];
+                var tradeId = req.body.sessionId.split("@")[1];
+                console.log("customerId:" + customerId + ", tradeId:" + tradeId);
+                return helper.getPayableRecievableInfoByCustId(customerId).then((result) => {
                     console.log('payable recievable rs length', result.length);
                     if (result.length > 0) {
                         res.json({
@@ -303,7 +296,9 @@ app.post('/api/webhook', function (req, res) {
                                         Trade_Date: result[0].Trade_Date,
                                         EX_Date: result[0].EX_Date,
                                         customer_ID: result[0].customer_ID,
-                                        Trade_Action: result[0].Trade_Action
+                                        Trade_Action: result[0].Trade_Action,
+                                        Customer_Name: result[0].Customer_Name,
+                                        quantity: result[0].quantity
                                     },
                                     lifespan: 5
                                 }
@@ -333,18 +328,19 @@ app.post('/api/webhook', function (req, res) {
                     }).end();
                 });
                 break;
-            case "caceis.payRecRaiseIssue-getCustId-yes-confirm":
+            case "caceis.payRecRaiseIssue-yes":
                 var payableRecievableInfo = _.find(req.body.result.contexts, ['name', "selected-securiry-info"]);
                 var bankInfo = _.find(req.body.result.contexts, ['name', "bank-info"]);
                 console.log('payableRecievableInfo', JSON.stringify(payableRecievableInfo));
                 var tradeAction = (payableRecievableInfo.parameters.Trade_Action == "Buy") ? "bought" : "sold";
+                //what is the new summary message
                 var summaryMessage = (payableRecievableInfo.parameters.Trade_Action == "Buy") ? "This makes the claim against you." : "This makes the claim against " + bankInfo.parameters.bankName;
                 res.json({
                     messages: [
                         {
                             "type": 0,
                             "platform": "facebook",
-                            "speech": "The customer " + tradeAction + " the securities on " + payableRecievableInfo.parameters.Trade_Date + " and the Ex date for the corporate action was" + payableRecievableInfo.parameters.EX_Date
+                            "speech": "Our customer Mr " + payableRecievableInfo.parameters.Customer_Name + " " + payableRecievableInfo.parameterstradeAction + " " + payableRecievableInfo.parameters.quantity + " shares of " + payableRecievableInfo.parameters.Security_Name + " on trade date " + payableRecievableInfo.parameters.Trade_Date + " and the ex-date for CA is " + payableRecievableInfo.parameters.EX_Date
                         },
                         {
                             "type": 0,
@@ -359,6 +355,17 @@ app.post('/api/webhook', function (req, res) {
                                 Subject: "Payables and Receivables"
                             },
                             lifespan: 3
+                        }
+                    ]
+                }).end();
+                break;
+            case "caceis.payRecRaiseIssue-yes-yes":
+                res.json({
+                    messages: [
+                        {
+                            "type": 0,
+                            "platform": "facebook",
+                            "speech": "I hope, we were able to clarify your queries. Do you have any further clarifications."
                         }
                     ]
                 }).end();
@@ -405,10 +412,8 @@ app.post('/chatbot/savehistory', function (req, res) {
 
 app.get('/test', function (req, res) {
     console.log("SSESSS", req.session);
-    return helper.getPayableRecievableInfoByCustId("22222222").then((result) => {
-        console.log('rs1', result.length);
-        var test = _.find(result, ['Security_Name', "Infosys"]);
-        console.log("rese", test);
+    return helper.getPayableRecievableInfoByCustId("615201337788", "T118188177").then((result) => {
+        console.log("rese", result[0].Counter_Party_Name);
         res.send("succ")
     }).catch((err) => {
         console.log("err", err);

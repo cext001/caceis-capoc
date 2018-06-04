@@ -101,7 +101,17 @@ module.exports = {
     },
     "getPayableRecievableInfoByCustId": function (custId) {
         return new Promise(function (resolve, reject) {
-            con.query("SELECT Trade_Date, EX_Date, Trade_Action, isin,customer_ID,Security_Name FROM payable_receivable WHERE customer_ID=? AND Event_Name='Cash Dividend'", [custId], function (err, result, fields) {
+            con.query("SELECT quantity,Customer_Name,Trade_Date, EX_Date, Trade_Action, isin,customer_ID,Security_Name FROM payable_receivable WHERE customer_ID=? AND Event_Name='Cash Dividend'", [custId], function (err, result, fields) {
+                if (err) {
+                    reject(err)
+                };
+                resolve(result)
+            });
+        });
+    },
+    "getPayableRecievableInfoByCustId": function (custId, tradeId) {
+        return new Promise(function (resolve, reject) {
+            con.query("SELECT * FROM tradetable WHERE customer_id=? AND Trade_ID=?", [custId, tradeId], function (err, result, fields) {
                 if (err) {
                     reject(err)
                 };
