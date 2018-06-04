@@ -31,13 +31,23 @@ app.post('/api/webhook', function (req, res) {
         console.log("Action: " + req.body.result.action + ", Intent: " + req.body.result.metadata.intentName);
         switch (req.body.result.action) {
             case "input.welcome":
-                res.json({
+                var customerId = req.body.sessionId.split("@")[0];
+                var tradeId = req.body.sessionId.split("@")[1];
+                var response = {
                     messages: [{
                         "type": 0,
                         "platform": "facebook",
                         "speech": "Hi , I'm Rosy , How can I help you today."
                     }]
-                }).end();
+                };
+                if (tradeId && customerId) {
+                    response.events = [
+                        {
+                            "name": "choose_payrec"
+                        }
+                    ]
+                }
+                res.json(response).end();
                 break;
             case "caceis.nameCompanyIntent":
                 res.json({
