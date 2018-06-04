@@ -40,7 +40,7 @@ app.post('/api/webhook', function (req, res) {
         console.log("Action: " + req.body.result.action + ", Intent: " + req.body.result.metadata.intentName);
         switch (req.body.result.action) {
             case "input.welcome":
-                console.log("custid", req.session.custid);
+                console.log("sess", req.session);
                 res.json({
                     messages: [{
                         "type": 0,
