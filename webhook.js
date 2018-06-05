@@ -45,7 +45,7 @@ app.post('/api/webhook', function (req, res) {
                         messages: [{
                             "type": 0,
                             "platform": "facebook",
-                            "speech": "Hi , I'm Rosy , How can I help you today."
+                            "speech": "Hi , I'm Emily , How can I help you today."
                         }]
                     };
                 }
@@ -206,7 +206,7 @@ app.post('/api/webhook', function (req, res) {
                         {
                             "type": 0,
                             "platform": "facebook",
-                            "speech": "Thank you for sharing the details on your side Mr " + customerInfo.parameters.customerName + ". However based on our database it is " + payableRecievableInfo.parameters.quantity + " Shares on "+payableRecievableInfo.parameters.Trade_Date+"."
+                            "speech": "Thank you for sharing the details on your side Mr " + customerInfo.parameters.customerName + ". However based on our database it is " + payableRecievableInfo.parameters.quantity + " Shares on " + payableRecievableInfo.parameters.Trade_Date + "."
                         },
                         {
                             "type": 0,
