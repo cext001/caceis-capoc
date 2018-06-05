@@ -126,7 +126,7 @@ app.post('/api/webhook', function (req, res) {
                                 {
                                     "type": 0,
                                     "platform": "facebook",
-                                    "speech": "You are referring to the claims processing of " + result[0].Security_Name + " Corporate Action - <Dividend> (ISIN number " + result[0].isin + ")",
+                                    "speech": "You are referring to the claims processing of " + result[0].Security_Name + " Corporate Action - Cash Dividend (ISIN number " + result[0].isin + ")",
                                 },
                                 {
                                     "type": 0,
