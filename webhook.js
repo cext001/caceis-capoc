@@ -74,7 +74,17 @@ app.post('/api/webhook', function (req, res) {
                                 "type": 0,
                                 "platform": "facebook",
                                 "speech": "Is your query about our recent e-mail"
-                            }]
+                            }],
+                            contextOut: [
+                                {
+                                    name: "customer-info",
+                                    parameters: {
+                                        customerName: result[0].Counter_Party_Name,
+                                        customerId: customerId
+                                    },
+                                    lifespan: 5
+                                }
+                            ]
                         }).end();
                     } else {
                         res.json({
@@ -183,6 +193,26 @@ app.post('/api/webhook', function (req, res) {
                             "platform": "facebook",
                             "speech": "Mr " + payableRecievableInfo.parameters.Customer_Name + " is  entitled to receive the cash dividend"
                         }
+                    ]
+                }).end();
+                break;
+            case "caceis.claimProcessingEnquiry-askEmailEnquiry-confirmSecurityInfo-raiseDispute":
+                var payableRecievableInfo = _.find(req.body.result.contexts, ['name', "selected-securiry-info"]);
+                var customerInfo = _.find(req.body.result.contexts, ['name', "customer-info"]);
+                console.log('payableRecievableInfo', JSON.stringify(payableRecievableInfo));
+                console.log('customerInfo', JSON.stringify(customerInfo));
+                res.json({
+                    messages: [
+                        {
+                            "type": 0,
+                            "platform": "facebook",
+                            "speech": "Thank you for sharing the details on your side Mr " + customerInfo.parameters.customerName + ". However based on our database it is " + payableRecievableInfo.parameters.quantity + " Shares on 09.05.2018 03:20 pm."
+                        },
+                        {
+                            "type": 0,
+                            "platform": "facebook",
+                            "speech": "I will send you the transaction details by email right away. Is that ok?."
+                        }
                     ],
                     contextOut: [
                         {
@@ -195,27 +225,13 @@ app.post('/api/webhook', function (req, res) {
                     ]
                 }).end();
                 break;
-            case "caceis.choosePayRec-yes-confirmClaimsProcessing-validateStockName":
-
-                break;
-            case "caceis.choosePayRec-yes-confirmClaimsProcessing-validateStockName-agree":
+            case "caceis.claimProcessingEnquiry-askEmailEnquiry-confirmSecurityInfo-raiseDispute-confirm":
                 res.json({
                     messages: [
                         {
                             "type": 0,
                             "platform": "facebook",
-                            "speech": "I hope, we were able to clarify your queries. Do you have any further clarifications."
-                        }
-                    ]
-                }).end();
-                break;
-            case "caceis.choosePayRec-yes-confirmClaimsProcessing-validateStockName-disagree":
-                res.json({
-                    messages: [
-                        {
-                            "type": 0,
-                            "platform": "facebook",
-                            "speech": "I am passing you the transaction details by email to you."
+                            "speech": "I hope, we were able to address your concern. Do you have any further clarifications Sir ?"
                         }
                     ]
                 }).end();

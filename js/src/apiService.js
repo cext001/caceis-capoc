@@ -90,19 +90,10 @@ define(['jquery', 'settings', 'utils', 'messageTemplates', 'cards', 'uuid'],
                             console.log("contexts", contexts);
                             console.log("botconversation", botconversation);
 
-                            $.each(contexts, function (key, value) {
-                                if (value.name == "account-info") {
-                                    customerId = value.parameters.accountNumber;
-                                }
-                                if (value.name == "customer-name") {
-                                    customerName = value.parameters.clientName;
-                                }
-                                if (value.name == "name-company-info") {
-                                    customerId = value.parameters.entityId;
-                                    customerName = value.parameters.firstName;
-                                }
-                                if (value.name == "subject-info") {
-                                    subject = value.parameters.Subject;
+                            $.each(contexts, function (key, value) {                                
+                                if (value.name == "customer-info") {
+                                    customerId = value.parameters.customerId;
+                                    customerName = value.parameters.customerName;
                                 }
                             });
 
