@@ -206,7 +206,7 @@ app.post('/api/webhook', function (req, res) {
                         {
                             "type": 0,
                             "platform": "facebook",
-                            "speech": "Thank you for sharing the details on your side Mr " + customerInfo.parameters.customerName + ". However based on our database it is " + payableRecievableInfo.parameters.quantity + " Shares on 09.05.2018 03:20 pm."
+                            "speech": "Thank you for sharing the details on your side Mr " + customerInfo.parameters.customerName + ". However based on our database it is " + payableRecievableInfo.parameters.quantity + " Shares on"+payableRecievableInfo.parameters.Trade_Date+"."
                         },
                         {
                             "type": 0,
