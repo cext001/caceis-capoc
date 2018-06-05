@@ -101,7 +101,7 @@ module.exports = {
     },
     "getPayableRecievableInfoByCustId": function (custId) {
         return new Promise(function (resolve, reject) {
-            con.query("SELECT quantity,Customer_Name,Trade_Date, EX_Date, Trade_Action, isin,customer_ID,Security_Name FROM payable_receivable WHERE customer_ID=? AND Event_Name!='Rights'", [custId], function (err, result, fields) {
+            con.query("SELECT Counter_Party_Name,quantity,Customer_Name,Trade_Date, EX_Date, Trade_Action, isin,customer_ID,Security_Name FROM payable_receivable WHERE customer_ID=? AND Event_Name!='Rights'", [custId], function (err, result, fields) {
                 if (err) {
                     reject(err)
                 };

@@ -238,7 +238,7 @@ app.post('/api/webhook', function (req, res) {
                             }, {
                                 "type": 0,
                                 "platform": "facebook",
-                                "speech": "Mr " + result[0].Counter_Party_Name + ", whether your query is in regard to our claims e-mail"
+                                "speech": "Mr " + result[0].Counter_Party_Name + ", we notice that you are coming from our e-mail on claims."
                             }]
                         }).end();
                     } else {
@@ -268,11 +268,11 @@ app.post('/api/webhook', function (req, res) {
                     messages: [{
                         "type": 0,
                         "platform": "facebook",
-                        "speech": "Could you please explain the quey in few words."
+                        "speech": "Do you have any queries on the claims processing."
                     }]
                 }).end();
                 break;
-            case "caceis.payRecRaiseIssue":
+            case "caceis.choosePayRec-yes-confirmClaimsProcessing":
                 var customerId = req.body.sessionId.split("@")[0];
                 var tradeId = req.body.sessionId.split("@")[1];
                 console.log("customerId:" + customerId + ", tradeId:" + tradeId);
@@ -284,7 +284,7 @@ app.post('/api/webhook', function (req, res) {
                                 {
                                     "type": 0,
                                     "platform": "facebook",
-                                    "speech": "You are referring to  ISIN number " + result[0].isin + " and  Stock name - " + result[0].Security_Name + " ?"
+                                    "speech": "You are referring to  ISIN number " + result[0].isin + " and  Stock name - " + result[0].Security_Name + " for CA action - Dividend ?"
                                 }
                             ],
                             contextOut: [
@@ -298,7 +298,8 @@ app.post('/api/webhook', function (req, res) {
                                         customer_ID: result[0].customer_ID,
                                         Trade_Action: result[0].Trade_Action,
                                         Customer_Name: result[0].Customer_Name,
-                                        quantity: result[0].quantity
+                                        quantity: result[0].quantity,
+                                        Counter_Party_Name: result[0].Counter_Party_Name
                                     },
                                     lifespan: 5
                                 }
@@ -328,9 +329,8 @@ app.post('/api/webhook', function (req, res) {
                     }).end();
                 });
                 break;
-            case "caceis.payRecRaiseIssue-yes":
+            case "caceis.choosePayRec-yes-confirmClaimsProcessing-validateStockName":
                 var payableRecievableInfo = _.find(req.body.result.contexts, ['name', "selected-securiry-info"]);
-                var bankInfo = _.find(req.body.result.contexts, ['name', "bank-info"]);
                 console.log('payableRecievableInfo', JSON.stringify(payableRecievableInfo));
                 var tradeAction = (payableRecievableInfo.parameters.Trade_Action == "Buy") ? "bought" : "sold";
                 res.json({
@@ -338,7 +338,7 @@ app.post('/api/webhook', function (req, res) {
                         {
                             "type": 0,
                             "platform": "facebook",
-                            "speech": "Our customer Mr " + payableRecievableInfo.parameters.Customer_Name + " " + payableRecievableInfo.parameters.Trade_Action + " " + payableRecievableInfo.parameters.quantity + " shares of " + payableRecievableInfo.parameters.securityName + " on trade date " + payableRecievableInfo.parameters.Trade_Date + " and the ex-date for CA is " + payableRecievableInfo.parameters.EX_Date
+                            "speech": "Our customer Mr " + payableRecievableInfo.parameters.Counter_Party_Name + " " + payableRecievableInfo.parameters.Trade_Action + " " + payableRecievableInfo.parameters.quantity + " shares of " + payableRecievableInfo.parameters.securityName + " on trade date " + payableRecievableInfo.parameters.Trade_Date + " and the ex-date for CA is " + payableRecievableInfo.parameters.EX_Date
                         },
                         {
                             "type": 0,
@@ -357,7 +357,7 @@ app.post('/api/webhook', function (req, res) {
                     ]
                 }).end();
                 break;
-            case "caceis.payRecRaiseIssue-yes-confirm":
+            case "caceis.choosePayRec-yes-confirmClaimsProcessing-validateStockName-agree":
                 res.json({
                     messages: [
                         {
