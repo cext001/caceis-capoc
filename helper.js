@@ -27,7 +27,7 @@ module.exports = {
                 if (err) {
                     reject(err)
                 };
-                //console.log("Number of records inserted: " + result.affectedRows);
+                console.log("Number of records inserted: " + result.affectedRows);
                 resolve(result);
             });
         });
