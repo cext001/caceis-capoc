@@ -268,7 +268,7 @@ app.post('/api/webhook', function (req, res) {
                     messages: [{
                         "type": 0,
                         "platform": "facebook",
-                        "speech": "Do you have any queries on the claims processing."
+                        "speech": "Do you have query on the claims processing."
                     }]
                 }).end();
                 break;
@@ -338,7 +338,7 @@ app.post('/api/webhook', function (req, res) {
                         {
                             "type": 0,
                             "platform": "facebook",
-                            "speech": "Our customer Mr " + payableRecievableInfo.parameters.Counter_Party_Name + " " + payableRecievableInfo.parameters.Trade_Action + " " + payableRecievableInfo.parameters.quantity + " shares of " + payableRecievableInfo.parameters.securityName + " on trade date " + payableRecievableInfo.parameters.Trade_Date + " and the ex-date for CA is " + payableRecievableInfo.parameters.EX_Date
+                            "speech": "Our customer " + payableRecievableInfo.parameters.Customer_Name + " " + tradeAction + " " + payableRecievableInfo.parameters.quantity + " shares of " + payableRecievableInfo.parameters.securityName + " on trade date " + payableRecievableInfo.parameters.Trade_Date + " and the ex-date for CA is " + payableRecievableInfo.parameters.EX_Date
                         },
                         {
                             "type": 0,
@@ -364,6 +364,17 @@ app.post('/api/webhook', function (req, res) {
                             "type": 0,
                             "platform": "facebook",
                             "speech": "I hope, we were able to clarify your queries. Do you have any further clarifications."
+                        }
+                    ]
+                }).end();
+                break;
+            case "caceis.choosePayRec-yes-confirmClaimsProcessing-validateStockName-disagree":
+                res.json({
+                    messages: [
+                        {
+                            "type": 0,
+                            "platform": "facebook",
+                            "speech": "I am passing you the transaction details by email to you."
                         }
                     ]
                 }).end();
