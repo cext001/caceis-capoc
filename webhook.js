@@ -234,11 +234,15 @@ app.post('/api/webhook', function (req, res) {
                             messages: [{
                                 "type": 0,
                                 "platform": "facebook",
-                                "speech": "Hi , I am Rosy"
+                                "speech": "Greetings Mr "+result[0].Counter_Party_Name+""
                             }, {
                                 "type": 0,
                                 "platform": "facebook",
-                                "speech": "Mr " + result[0].Counter_Party_Name + ", we notice that you are coming from our e-mail on claims."
+                                "speech": "My Name is Emily"
+                            }, {
+                                "type": 0,
+                                "platform": "facebook",
+                                "speech": "Is your query about our recent e-mail"
                             }]
                         }).end();
                     } else {
@@ -268,7 +272,7 @@ app.post('/api/webhook', function (req, res) {
                     messages: [{
                         "type": 0,
                         "platform": "facebook",
-                        "speech": "Do you have query on the claims processing."
+                        "speech": "Thank you."
                     }]
                 }).end();
                 break;
@@ -284,7 +288,12 @@ app.post('/api/webhook', function (req, res) {
                                 {
                                     "type": 0,
                                     "platform": "facebook",
-                                    "speech": "You are referring to  ISIN number " + result[0].isin + " and  Stock name - " + result[0].Security_Name + " for CA action - Dividend ?"
+                                    "speech":"You are referring to the claims processing of "+result[0].Security_Name+" Corporate Action - <Dividend> (ISIN number "+result[0].isin+")",
+                                },
+                                {
+                                    "type": 0,
+                                    "platform": "facebook",
+                                    "speech":"Is that correct?",
                                 }
                             ],
                             contextOut: [
@@ -294,6 +303,7 @@ app.post('/api/webhook', function (req, res) {
                                         securityISIN: result[0].isin,
                                         securityName: result[0].Security_Name,
                                         Trade_Date: result[0].Trade_Date,
+                                        Payment_Date: result[0].Payment_Date,
                                         EX_Date: result[0].EX_Date,
                                         customer_ID: result[0].customer_ID,
                                         Trade_Action: result[0].Trade_Action,
@@ -338,12 +348,12 @@ app.post('/api/webhook', function (req, res) {
                         {
                             "type": 0,
                             "platform": "facebook",
-                            "speech": "Our customer " + payableRecievableInfo.parameters.Customer_Name + " " + tradeAction + " " + payableRecievableInfo.parameters.quantity + " shares of " + payableRecievableInfo.parameters.securityName + " on trade date " + payableRecievableInfo.parameters.Trade_Date + " and the ex-date for CA is " + payableRecievableInfo.parameters.EX_Date
+                            "speech":"Our customer Mr "+payableRecievableInfo.parameters.Customer_Name+" "+tradeAction+" "+payableRecievableInfo.parameters.quantity+" shares of "+payableRecievableInfo.parameters.securityName+" on trade date "+payableRecievableInfo.parameters.Trade_Date+" and the ex-date for CA is "+payableRecievableInfo.parameters.EX_Date+".",
                         },
                         {
                             "type": 0,
                             "platform": "facebook",
-                            "speech": "This makes our customer entitle to receive the cash dividend"
+                            "speech": "Mr "+payableRecievableInfo.parameters.Customer_Name+" is  entitled to receive the cash dividend"
                         }
                     ],
                     contextOut: [
