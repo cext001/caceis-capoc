@@ -37,7 +37,7 @@ app.post('/api/webhook', function (req, res) {
                 if (tradeId && customerId) {
                     response = {
                         "followupEvent": {
-                            "name": "choose_payrec"
+                            "name": "claim-processing-enquiry"
                         }
                     }
                 } else {
@@ -52,177 +52,8 @@ app.post('/api/webhook', function (req, res) {
                 console.log("response", response);
                 res.json(response).end();
                 break;
-            case "caceis.nameCompanyIntent":
-                res.json({
-                    messages: [
-                        {
-                            "type": 0,
-                            "platform": "facebook",
-                            "speech": "What's your query related to ?"
-                        }
-                    ]
-                }).end();
-                break;
-            /**--------Second scenario-Reconciliation issue START----------**/
-            case "caceis.raiseReconciliationIssue":
-                var securityName = req.body.result.parameters.securityName;
-                return helper.getSecurityDetailsByName(securityName).then((result) => {
-                    console.log("securityinfo", result);
-                    console.log("securityinfo row count", result.length);
-                    if (result.length > 0) {
-                        res.json({
-                            messages: [
-                                {
-                                    "type": 0,
-                                    "platform": "facebook",
-                                    "speech": "You are referring to ISIN number " + result[0].ISIN + " and  Stock name - " + result[0].Security_Name + " ?"
-                                }
-                            ],
-                            contextOut: [
-                                {
-                                    name: "security-info",
-                                    parameters: {
-                                        securityISIN: result[0].ISIN,
-                                        securityName: result[0].Security_Name
-                                    },
-                                    lifespan: 5
-                                }
-                            ]
-                        }).end();
-                    } else {
-                        res.json({
-                            messages: [
-                                {
-                                    "type": 0,
-                                    "platform": "facebook",
-                                    "speech": "Unable to find security information."
-                                }
-                            ]
-                        }).end();
-                    }
-                }).catch((err) => {
-                    console.log("get security details err", err);
-                    res.json({
-                        messages: [
-                            {
-                                "type": 0,
-                                "platform": "facebook",
-                                "speech": "Something went wrong"
-                            }
-                        ]
-                    }).end();
-                });
-                break;
-            case "caceis.raiseReconciliationIssue-confirm":
-                var securityInfo = _.find(req.body.result.contexts, ['name', 'security-info']);
-                var nameCompanyInfo = _.find(req.body.result.contexts, ['name', 'name-company-info']);
-                var isin = securityInfo.parameters.securityISIN;
-
-                //need to handle these items
-                var companyName = nameCompanyInfo.parameters.companyName;
-                var customerId = req.body.sessionId.split("@")[0];
-
-                console.log("isin: " + isin + " ,company name: " + companyName + " ,customerId: " + customerId);
-
-                return helper.getHoldingAndCorporateActionData(customerId, isin).then((result) => {
-                    console.log('Holdings data', result[0][0]);
-                    console.log('Holdings data row count', result[0].length);
-                    console.log('corporate action data', result[1][0]);
-                    console.log('corporate action data', result[1].length);
-
-                    var holdingsInfo = (result[0].length > 0)
-                        ? "Your holdings on this ISIN from " + companyName + " is " + result[0][0].quantity + "shares"
-                        : "Unable to find holdings for this ISIN from " + companyName;
-                    var corporateActionInfo = (result[1].length > 0)
-                        ? companyName + " is providing " + result[1][0].Event_Name + " issue and its offered at " + result[1][0].Pershare_Offer + ":1 @ Rs " + result[1][0].Pershare_Offer + ". What is your query about ?"
-                        : "Unable to find records for the corporate action events for the ISIN";
-
-                    res.json({
-                        messages: [
-                            {
-                                "type": 0,
-                                "platform": "facebook",
-                                "speech": holdingsInfo
-                            },
-                            {
-                                "type": 0,
-                                "platform": "facebook",
-                                "speech": corporateActionInfo
-                            }
-                        ]
-                    }).end();
-                }).catch((err) => {
-                    console.log("err", err);
-                    res.json({
-                        messages: [
-                            {
-                                "type": 0,
-                                "platform": "facebook",
-                                "speech": "Something went wrong"
-                            }
-                        ]
-                    }).end();
-                });
-                break;
-            case "caceis.raiseReconciliationIssue-confirm-query":
-                var securityInfo = _.find(req.body.result.contexts, ['name', 'security-info']);
-                var nameCompanyInfo = _.find(req.body.result.contexts, ['name', 'name-company-info']);
-                var securityName = securityInfo.parameters.securityName;
-                var customerId = req.body.sessionId.split("@")[0];
-                var isin = securityInfo.parameters.securityISIN;
-                console.log("isin: " + isin + ", customerId: " + customerId + " , securityName: " + securityName);
-
-                return helper.getTradeStatusBySecurityIdAndCustomerId(isin, customerId).then((result) => {
-                    console.log("tradeinfo", result);
-                    console.log("tradeinfo row count", result.length);
-                    if (result.length > 0) {
-                        res.json({
-                            messages: [
-                                {
-                                    "type": 0,
-                                    "platform": "facebook",
-                                    "speech": "I see. I would like to inform that " + result[0].quantity + " quanity of " + securityName + " shares are " + result[0].Status + "."
-                                }
-                            ]
-                        }).end();
-                    } else {
-                        res.json({
-                            messages: [
-                                {
-                                    "type": 0,
-                                    "platform": "facebook",
-                                    "speech": "Trade info not found in the system."
-                                }
-                            ]
-                        }).end();
-                    }
-                }).catch((err) => {
-                    console.log("trade status err", err);
-                    res.json({
-                        messages: [
-                            {
-                                "type": 0,
-                                "platform": "facebook",
-                                "speech": "Something went wrong"
-                            }
-                        ]
-                    }).end();
-                });
-                break;
-            case "caceis.raiseReconciliationIssue-confirm-query-wrapup":
-                res.json({
-                    messages: [
-                        {
-                            "type": 0,
-                            "platform": "facebook",
-                            "speech": "I hope, we were able to clarify your queries . Do you have any further clarifications ?"
-                        }
-                    ]
-                }).end();
-                break;
-            /**--------Second scenario-Reconciliation issue END----------**/
             /**--------Third scenario-Payables and Receivables START----------**/
-            case "caceis.confirmPayRec":
+            case "caceis.claimProcessingEnquiry":
                 var customerId = req.body.sessionId.split("@")[0];
                 var tradeId = req.body.sessionId.split("@")[1];
                 console.log("customerId:" + customerId + ", tradeId:" + tradeId);
@@ -267,7 +98,7 @@ app.post('/api/webhook', function (req, res) {
                     }).end();
                 });
                 break;
-            case "caceis.choosePayRec-yes":
+            case "caceis.claimProcessingEnquiry-askEmailEnquiry":
                 var customerId = req.body.sessionId.split("@")[0];
                 var tradeId = req.body.sessionId.split("@")[1];
 
@@ -336,7 +167,7 @@ app.post('/api/webhook', function (req, res) {
                     }).end();
                 });
                 break;
-            case "caceis.choosePayRec-yes-confirmClaimsProcessing":
+            case "caceis.claimProcessingEnquiry-askEmailEnquiry-confirmSecurityInfo":
                 var payableRecievableInfo = _.find(req.body.result.contexts, ['name', "selected-securiry-info"]);
                 console.log('payableRecievableInfo', JSON.stringify(payableRecievableInfo));
                 var tradeAction = (payableRecievableInfo.parameters.Trade_Action == "Buy") ? "bought" : "sold";
@@ -365,7 +196,7 @@ app.post('/api/webhook', function (req, res) {
                 }).end();
                 break;
             case "caceis.choosePayRec-yes-confirmClaimsProcessing-validateStockName":
-                
+
                 break;
             case "caceis.choosePayRec-yes-confirmClaimsProcessing-validateStockName-agree":
                 res.json({
