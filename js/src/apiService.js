@@ -95,6 +95,9 @@ define(['jquery', 'settings', 'utils', 'messageTemplates', 'cards', 'uuid'],
                                     customerId = value.parameters.customerId;
                                     customerName = value.parameters.customerName;
                                 }
+                                if (value.name == "subject-info") {
+                                    subject = value.parameters.Subject;
+                                }
                             });
 
                             $.ajax({
