@@ -186,12 +186,12 @@ app.post('/api/webhook', function (req, res) {
                         {
                             "type": 0,
                             "platform": "facebook",
-                            "speech": "Our customer Mr " + payableRecievableInfo.parameters.Customer_Name + " " + tradeAction + " " + payableRecievableInfo.parameters.quantity + " shares of " + payableRecievableInfo.parameters.securityName + " on trade date " + payableRecievableInfo.parameters.Trade_Date + " and the ex-date for CA is " + payableRecievableInfo.parameters.EX_Date + ".",
+                            "speech": "Our client " + tradeAction + " " + payableRecievableInfo.parameters.quantity + " shares of " + payableRecievableInfo.parameters.securityName + " on trade date " + payableRecievableInfo.parameters.Trade_Date + " and the ex-date for CA is " + payableRecievableInfo.parameters.EX_Date + ".",
                         },
                         {
                             "type": 0,
                             "platform": "facebook",
-                            "speech": "Mr " + payableRecievableInfo.parameters.Customer_Name + " is  entitled to receive the cash dividend"
+                            "speech": "Our client is entitled to receive the cash dividend"
                         }
                     ]
                 }).end();
@@ -206,7 +206,7 @@ app.post('/api/webhook', function (req, res) {
                         {
                             "type": 0,
                             "platform": "facebook",
-                            "speech": "Thank you for sharing the details on your side Mr " + customerInfo.parameters.customerName + ". However based on our database it is " + payableRecievableInfo.parameters.quantity + " Shares on " + payableRecievableInfo.parameters.Trade_Date + "."
+                            "speech": "Thank you for sharing the details on your side . However based on our database it is " + payableRecievableInfo.parameters.quantity + " Shares on " + payableRecievableInfo.parameters.Trade_Date + "."
                         },
                         {
                             "type": 0,
