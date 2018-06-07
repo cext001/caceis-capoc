@@ -15,14 +15,13 @@ const REST_PORT = process.env.PORT || 3000;
 app.use(express.static(__dirname));
 
 app.get('/', function (req, res) {
-    res.sendFile(__dirname + '/home.html');
+    res.sendFile(__dirname + '/hexa_home.html');
 });
 
 app.get('/chat', function (req, res) {
     res.sendFile(__dirname + '/chat.html');
 });
 app.get('/caccenter', function (req, res) {
-    console.log("custid", req.query.custid)
     res.sendFile(__dirname + '/caccenter.html');
 });
 app.post('/api/webhook', function (req, res) {
