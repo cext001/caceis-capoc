@@ -26,7 +26,7 @@ app.get('/caccenter', function (req, res) {
 });
 app.post('/api/webhook', function (req, res) {
     console.log('Dialogflow Request body: ' + JSON.stringify(req.body));
-    console.log("Referer",req.headers.referrer || req.headers.referer);
+    console.log("Referer",req.headers);
     if (req.body.result) {
         console.log("Action: " + req.body.result.action + ", Intent: " + req.body.result.metadata.intentName);
         switch (req.body.result.action) {
